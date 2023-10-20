@@ -34,7 +34,7 @@ export class PostServiceImpl implements PostService {
     const author = await userService.getUser(post.authorId)
     if (author.isPrivate) {
       const doesFollow = await followerService.doesFollowExist(userId, author.id)
-      if (!doesFollow) throw new ForbiddenException()
+      if (!doesFollow) throw new NotFoundException('post')
     }
     return post
   }
@@ -55,7 +55,7 @@ export class PostServiceImpl implements PostService {
     // DID: throw exception when the author has a private profile and the user doesn't follow them
     const doesFollowExist = await followerService.doesFollowExist(userId, authorId);
     const author = await userService.getUser(authorId);
-    if (!doesFollowExist && author.isPrivate) throw new ForbiddenException();
+    if (!doesFollowExist && author.isPrivate) throw new NotFoundException('post');
     return await this.repository.getByAuthorId(authorId);
   }
 }
