@@ -2,8 +2,8 @@ import express from 'express'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import swaggerUi from 'swagger-ui-express'
-import swaggerJsdoc from 'swagger-jsdoc'
+import swaggerJSDocs  from "swagger-jsdoc";
+import swaggerUi  from "swagger-ui-express"
 
 import { Constants, NodeEnv, Logger } from '@utils'
 import { router } from '@router'
@@ -54,7 +54,7 @@ const options = {
   apis: ["./router/index.ts"],
 };
 
-const specs = swaggerJsdoc(options);
+const specs = swaggerJSDocs(options);
 app.use(
   "/docs",
   swaggerUi.serve,
