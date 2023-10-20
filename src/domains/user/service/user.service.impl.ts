@@ -19,6 +19,13 @@ export class UserServiceImpl implements UserService {
   }
 
   async deleteUser (userId: any): Promise<void> {
-    await this.repository.delete(userId)
+    await this.repository.delete(userId);
+  }
+
+  async setPrivate (userId: any, isPrivate: string): Promise<void> {
+    if (isPrivate !== 'true' && isPrivate !== 'false') throw new Error('The parameter must be true or false')
+    let set: boolean
+    isPrivate === 'true' ? set = true : set = false
+    await this.repository.setPrivate(userId, set)
   }
 }

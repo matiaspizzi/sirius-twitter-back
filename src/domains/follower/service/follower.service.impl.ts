@@ -22,4 +22,9 @@ export class FollowerServiceImpl implements FollowerService {
     if (!follow) throw new NotFoundException('follow')
     return follow
   }
+
+  async doesFollowExist (followerId: string, followedId: string): Promise<boolean> {
+    const follow = await this.repository.getByIds(followerId, followedId)
+    return (follow != null)
+  }
 }
