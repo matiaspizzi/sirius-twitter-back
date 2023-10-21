@@ -14,6 +14,41 @@ export const postRouter = Router()
 // Use dependency injection
 const service: PostService = new PostServiceImpl(new PostRepositoryImpl(db))
 
+/**
+ * @swagger
+ * /api/post:
+ *   get:
+ *     security:
+ *       - bearer: []
+ *     summary: Get latest posts
+ *     tags: [Post]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: The number of posts to return
+ *       - in: query
+ *         name: before
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: The cursor to the previous page
+ *       - in: query
+ *         name: after
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: The cursor to the next page
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ */
 postRouter.get('/', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { limit, before, after } = req.query as Record<string, string>
@@ -23,6 +58,29 @@ postRouter.get('/', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).json(posts)
 })
 
+/**
+ * @swagger
+ * /api/post/:post_id:
+ *   get:
+ *     security:
+ *       - bearer: []
+ *     summary: Get post by id
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The post id
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ */
 postRouter.get('/:postId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { postId } = req.params
@@ -32,6 +90,29 @@ postRouter.get('/:postId', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).json(post)
 })
 
+/**
+ * @swagger
+ * /api/post/by_user/:user_id:
+ *   get:
+ *     security:
+ *       - bearer: []
+ *     summary: Get posts by author
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The author id
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ */
 postRouter.get('/by_user/:userId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { userId: authorId } = req.params
@@ -41,6 +122,28 @@ postRouter.get('/by_user/:userId', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).json(posts)
 })
 
+/**
+ * @swagger
+ * /api/post:
+ *   post:
+ *     security:
+ *       - bearer: []
+ *     summary: Create post
+ *     tags: [Post]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreatePostInput'
+ *     responses:
+ *       201:
+ *         description: The post was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ */
 postRouter.post('/', BodyValidation(CreatePostInputDTO), async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const data = req.body
@@ -50,11 +153,34 @@ postRouter.post('/', BodyValidation(CreatePostInputDTO), async (req: Request, re
   return res.status(HttpStatus.CREATED).json(post)
 })
 
+/**
+ * @swagger
+ * /api/post/:post_id:
+ *   delete:
+ *     security:
+ *       - bearer: []
+ *     summary: Delete post
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The post id
+ *     responses:
+ *       200:
+ *         description: The post was successfully deleted
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Deleted post {post_id}
+ */
 postRouter.delete('/:postId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { postId } = req.params
 
   await service.deletePost(userId, postId)
 
-  return res.status(HttpStatus.OK).send(`Deleted post ${postId}`)
+  return res.status(HttpStatus.OK).send({ message: `Deleted post ${postId}` })
 })

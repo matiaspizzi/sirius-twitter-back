@@ -2,8 +2,8 @@ import express from 'express'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import swaggerJSDocs  from "swagger-jsdoc";
-import swaggerUi  from "swagger-ui-express"
+import swaggerJSDocs from 'swagger-jsdoc'
+import swaggerUi from 'swagger-ui-express'
 
 import { Constants, NodeEnv, Logger } from '@utils'
 import { router } from '@router'
@@ -38,25 +38,32 @@ app.listen(Constants.PORT, () => {
 
 const options = {
   definition: {
-    openapi: "3.1.0",
+    openapi: '3.1.0',
     info: {
-      title: "Twitter Express API with Swagger",
-      version: "0.1.0",
+      title: 'Twitter Express API',
+      version: '0.1.0',
       description:
-        "Twitter API with Swagger doc",
+        'Twitter API Documentation'
     },
     servers: [
       {
-        url: "http://localhost:8080",
-      },
-    ],
+        url: 'http://localhost:8080'
+      }
+    ]
   },
-  apis: ["./router/index.ts"],
-};
+  apis: [
+    './src/router/index.ts',
+    './src/domains/user/controller/*.ts',
+    './src/domains/auth/controller/*.ts',
+    './src/domains/post/controller/*.ts',
+    './src/domains/health/controller/*.ts',
+    './src/domains/follower/controller/*.ts'
+  ]
+}
 
-const specs = swaggerJSDocs(options);
+const specs = swaggerJSDocs(options)
 app.use(
-  "/docs",
+  '/docs',
   swaggerUi.serve,
   swaggerUi.setup(specs)
-);
+)
