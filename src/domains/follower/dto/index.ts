@@ -11,4 +11,3 @@ export class FollowerDTO {
   followedId: string
   createdAt: Date
 }
-

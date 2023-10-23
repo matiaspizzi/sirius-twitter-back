@@ -6,6 +6,7 @@ import { postRouter } from '@domains/post'
 import { authRouter } from '@domains/auth'
 import { healthRouter } from '@domains/health'
 import { followerRouter } from '@domains/follower'
+import { reactionRouter } from '@domains/reaction'
 
 export const router = Router()
 
@@ -14,7 +15,7 @@ router.use('/auth', authRouter)
 router.use('/user', withAuth, userRouter)
 router.use('/post', withAuth, postRouter)
 router.use('/follower', withAuth, followerRouter)
-
+router.use('/reaction', withAuth, reactionRouter)
 // Swagger components
 /**
  * @swagger
@@ -138,6 +139,57 @@ router.use('/follower', withAuth, followerRouter)
  *           $ref: '#/components/schemas/User'
  *         followed:
  *           $ref: '#/components/schemas/User'
+ *     Reaction:
+ *       type: object
+ *       required:
+ *         - userId
+ *         - postId
+ *         - type
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Auto-generated id
+ *         userId:
+ *             type: string
+ *             description: User id
+ *         postId:
+ *           type: string
+ *           description: Post id
+ *         type:
+ *           type: string
+ *           enum:
+ *             - LIKE
+ *             - RETWEET
+ *           description: Reaction type
+ *         createdAt:
+ *           type: string
+ *           format: date
+ *           description: The date the reaction was created
+ *         updatedAt:
+ *           type: string
+ *           format: date
+ *           description: The date the reaction was updated
+ *         deletedAt:
+ *           type: string
+ *           format: date
+ *           description: Optional date that the reaction was deleted
+ *         user:
+ *           $ref: '#/components/schemas/User'
+ *         post:
+ *           $ref: '#/components/schemas/Post'
+ *     ReactionInput:
+ *       type: object
+ *       required:
+ *         - type
+ *       properties:
+ *         type:
+ *           type: string
+ *           enum:
+ *             - LIKE
+ *             - RETWEET
+ *       description: Reaction type
+ *       example:
+ *         type: LIKE
  *     LoginInput:
  *       type: object
  *       required:

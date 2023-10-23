@@ -19,19 +19,20 @@ datasource db {
 model User {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid // Primary Key
 
-  username String  @unique // Unique constraint
-  name     String? @db.VarChar(35) // Limit display name to 35 characters
-  email    String  @unique // Unique constraint
-  password String
-  isPrivate  Boolean @default(false)
+  username  String  @unique // Unique constraint
+  name      String? @db.VarChar(35) // Limit display name to 35 characters
+  email     String  @unique // Unique constraint
+  password  String
+  isPrivate Boolean @default(false)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime? // Optional value
 
   posts     Post[]
-  follows   Follow[] @relation(name: "follows")
-  followers Follow[] @relation(name: "followers")
+  follows   Follow[]   @relation(name: "follows")
+  followers Follow[]   @relation(name: "followers")
+  reactions Reaction[]
 }
 
 model Follow {
@@ -51,13 +52,39 @@ model Follow {
 model Post {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid // Primary Key
 
-  authorId String   @db.Uuid // Foreign Key
-  content  String   @db.VarChar(240) // Limit the content to 240 characters
-  images   String[]
+  authorId  String     @db.Uuid // Foreign Key
+  content   String     @db.VarChar(240) // Limit the content to 240 characters
+  images    String[]
+  reactions Reaction[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime? // Optional value
 
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade) // One to many
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade) // One to many
+
+  parent    Post?    @relation("ChildToParent", fields: [parentId], references: [id])
+  parentId  String?  @db.Uuid
+  
+  children  Post[]   @relation("ChildToParent")
+}
+
+model Reaction {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  userId String       @db.Uuid
+  postId String       @db.Uuid
+  type   ReactionType
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // Optional value
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+enum ReactionType {
+  LIKE
+  RETWEET
 }

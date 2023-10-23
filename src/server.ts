@@ -57,7 +57,8 @@ const options = {
     './src/domains/auth/controller/*.ts',
     './src/domains/post/controller/*.ts',
     './src/domains/health/controller/*.ts',
-    './src/domains/follower/controller/*.ts'
+    './src/domains/follower/controller/*.ts',
+    './src/domains/reaction/controller/*.ts'
   ]
 }
 

@@ -1,0 +1,54 @@
+import { PrismaClient, ReactionType } from '@prisma/client'
+import { ReactionDTO } from '../dto'
+import { ReactionRepository } from './reaction.repository'
+
+export class ReactionRepositoryImpl implements ReactionRepository {
+  constructor (private readonly db: PrismaClient) {}
+
+  async create (userId: string, postId: string, type: ReactionType): Promise<ReactionDTO> {
+    return await this.db.reaction.create({
+      data: {
+        userId,
+        postId,
+        type
+      }
+    }).then(reaction => new ReactionDTO(reaction))
+  }
+
+  async delete (reactionId: any): Promise<void> {
+    await this.db.reaction.delete({
+      where: {
+        id: reactionId
+      }
+    })
+  }
+
+  async getById (reactionId: any): Promise<ReactionDTO | null> {
+    const reaction = await this.db.reaction.findUnique({
+      where: {
+        id: reactionId
+      }
+    })
+    return reaction ? new ReactionDTO(reaction) : null
+  }
+
+  async getByIdsAndType (userId: string, postId: string, type: ReactionType): Promise<ReactionDTO | null> {
+    const reaction = await this.db.reaction.findFirst({
+      where: {
+        userId,
+        postId,
+        type
+      }
+    })
+    return reaction ? new ReactionDTO(reaction) : null
+  }
+
+  async getByPostId (postId: string): Promise<ReactionDTO[] | null> {
+    const reaction = await this.db.reaction.findMany({
+      where: {
+        postId
+      }
+    })
+    return reaction.length ? reaction.map(r => new ReactionDTO(r)) : null
+  }
+}
