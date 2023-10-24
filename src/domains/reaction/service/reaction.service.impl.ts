@@ -13,6 +13,12 @@ export class ReactionServiceImpl implements ReactionService {
     return reaction
   }
 
+  async getReactionsByUserAndType (userId: string, type: ReactionType): Promise<ReactionDTO[]> {
+    const reactions = await this.repository.getByUserAndType(userId, type)
+    if (!reactions) throw new NotFoundException('reaction')
+    return reactions
+  }
+
   async createReaction (userId: string, postId: string, type: ReactionType): Promise<ReactionDTO> {
     if (await this.doesReactionExist(userId, postId, type)) throw new ValidationException([{ message: 'Reaction already exists' }])
     return await this.repository.create(userId, postId, type)

@@ -44,6 +44,16 @@ export class ReactionRepositoryImpl implements ReactionRepository {
     return reaction ? new ReactionDTO(reaction) : null
   }
 
+  async getByUserAndType (userId: string, type: ReactionType): Promise<ReactionDTO[] | null> {
+    const reaction = await this.db.reaction.findMany({
+      where: {
+        userId,
+        type
+      }
+    })
+    return reaction.length ? reaction.map(r => new ReactionDTO(r)) : null
+  }
+
   async getByPostId (postId: string): Promise<ReactionDTO[] | null> {
     const reaction = await this.db.reaction.findMany({
       where: {
