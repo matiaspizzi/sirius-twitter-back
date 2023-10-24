@@ -10,6 +10,7 @@ export class CommentRepositoryImpl implements CommentRepository {
     const comment = await this.db.post.create({
       data: {
         authorId: userId,
+        isComment: true,
         ...data
       }
     })
@@ -19,6 +20,7 @@ export class CommentRepositoryImpl implements CommentRepository {
   async getAllByPostId (postId: string): Promise<PostDTO[]> {
     const comments = await this.db.post.findMany({
       where: {
+        isComment: true,
         parentId: postId
       },
       orderBy: [
@@ -30,18 +32,18 @@ export class CommentRepositoryImpl implements CommentRepository {
     return comments.map(comment => new PostDTO(comment))
   }
 
-  async delete (postId: string): Promise<void> {
+  async delete (commentId: string): Promise<void> {
     await this.db.post.delete({
       where: {
-        id: postId
+        id: commentId
       }
     })
   }
 
-  async getById (postId: string): Promise<PostDTO | null> {
+  async getById (commentId: string): Promise<PostDTO | null> {
     const post = await this.db.post.findUnique({
       where: {
-        id: postId
+        id: commentId
       }
     })
     return (post != null) ? new PostDTO(post) : null
@@ -50,6 +52,7 @@ export class CommentRepositoryImpl implements CommentRepository {
   async getByAuthorId (authorId: string): Promise<PostDTO[]> {
     const posts = await this.db.post.findMany({
       where: {
+        isComment: true,
         authorId
       }
     })

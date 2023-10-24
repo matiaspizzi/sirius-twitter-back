@@ -27,7 +27,7 @@ export class PostDTO {
   content: string
   images: string[]
   createdAt: Date
-  parentId?: string
+  parentId: string | null
 }
 
 export class ExtendedPostDTO extends PostDTO {

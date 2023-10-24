@@ -7,7 +7,7 @@ import { db, BodyValidation } from '@utils'
 
 import { CommentRepositoryImpl } from '../repository'
 import { CommentService, CommentServiceImpl } from '../service'
-import { CreateCommentInputDTO } from '../dto'
+import { CreatePostInputDTO } from '@domains/post/dto'
 
 export const commentRouter = Router()
 
@@ -16,56 +16,12 @@ const service: CommentService = new CommentServiceImpl(new CommentRepositoryImpl
 
 /**
  * @swagger
- * /api/post:
+ * /api/comment/:post_id:
  *   get:
  *     security:
  *       - bearer: []
- *     summary: Get latest posts
- *     tags: [Post]
- *     parameters:
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *         required: false
- *         description: The number of posts to return
- *       - in: query
- *         name: before
- *         schema:
- *           type: string
- *         required: false
- *         description: The cursor to the previous page
- *       - in: query
- *         name: after
- *         schema:
- *           type: string
- *         required: false
- *         description: The cursor to the next page
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Post'
- */
-commentRouter.get('/', async (req: Request, res: Response) => {
-  const { userId } = res.locals.context
-  const { limit, before, after } = req.query as Record<string, string>
-
-  const comments = await service.getLatestPosts(userId, { limit: Number(limit), before, after })
-
-  return res.status(HttpStatus.OK).json(posts)
-})
-
-/**
- * @swagger
- * /api/post/:post_id:
- *   get:
- *     security:
- *       - bearer: []
- *     summary: Get post by id
- *     tags: [Post]
+ *     summary: Get comments by post id
+ *     tags: [Comment]
  *     parameters:
  *       - in: path
  *         name: post_id
@@ -81,30 +37,30 @@ commentRouter.get('/', async (req: Request, res: Response) => {
  *             schema:
  *               $ref: '#/components/schemas/Post'
  */
-commentRouter.get('/:commentId', async (req: Request, res: Response) => {
+commentRouter.get('/:postId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
-  const { commentId } = req.params
+  const { postId } = req.params
 
-  const post = await service.getPost(userId, commentId)
+  const comments = await service.getCommentsByPost(userId, postId)
 
-  return res.status(HttpStatus.OK).json(post)
+  return res.status(HttpStatus.OK).json(comments)
 })
 
 /**
  * @swagger
- * /api/post/by_user/:user_id:
+ * /api/comment/by_user/:user_id:
  *   get:
  *     security:
  *       - bearer: []
- *     summary: Get posts by author
- *     tags: [Post]
+ *     summary: Get comments by user
+ *     tags: [Comment]
  *     parameters:
  *       - in: path
  *         name: user_id
  *         schema:
  *           type: string
  *         required: true
- *         description: The author id
+ *         description: The user id
  *     responses:
  *       200:
  *         description: OK
@@ -124,12 +80,19 @@ commentRouter.get('/by_user/:userId', async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /api/post:
+ * /api/comment/:post_id:
  *   post:
  *     security:
  *       - bearer: []
- *     summary: Create post
- *     tags: [Post]
+ *     summary: Create comment
+ *     tags: [Comment]
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The post id
  *     requestBody:
  *       required: true
  *       content:
@@ -138,16 +101,16 @@ commentRouter.get('/by_user/:userId', async (req: Request, res: Response) => {
  *             $ref: '#/components/schemas/CreatePostInput'
  *     responses:
  *       201:
- *         description: The post was successfully created
+ *         description: The comment was successfully created
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Post'
  */
-commentRouter.post('/', BodyValidation(CreateCommentInputDTO), async (req: Request, res: Response) => {
+commentRouter.post('/:postId', BodyValidation(CreatePostInputDTO), async (req: Request, res: Response) => {
   const { userId } = res.locals.context
-  const data = req.body
-
+  const { postId } = req.params
+  const data = {...req.body, parentId: postId}
   const comment = await service.createComment(userId, data)
 
   return res.status(HttpStatus.CREATED).json(comment)
@@ -155,32 +118,32 @@ commentRouter.post('/', BodyValidation(CreateCommentInputDTO), async (req: Reque
 
 /**
  * @swagger
- * /api/post/:post_id:
+ * /api/comment/:comment_id:
  *   delete:
  *     security:
  *       - bearer: []
- *     summary: Delete post
- *     tags: [Post]
+ *     summary: Delete comment
+ *     tags: [Comment]
  *     parameters:
  *       - in: path
- *         name: post_id
+ *         name: comment_id
  *         schema:
  *           type: string
  *         required: true
- *         description: The post id
+ *         description: The comment id
  *     responses:
  *       200:
- *         description: The post was successfully deleted
+ *         description: The comment was successfully deleted
  *         content:
  *           application/json:
  *             example:
- *               message: Deleted post {post_id}
+ *               message: Deleted comment {comment_id}
  */
 commentRouter.delete('/:commentId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { commentId } = req.params
 
-  await service.deletePost(userId, commentId)
+  await service.deleteComment(userId, commentId)
 
   return res.status(HttpStatus.OK).send({ message: `Deleted comment ${commentId}` })
 })

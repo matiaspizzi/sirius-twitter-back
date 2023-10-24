@@ -150,6 +150,5 @@ userRouter.post('/private/:isPrivate', async (req: Request, res: Response) => {
   const { isPrivate } = req.params
 
   await service.setPrivate(userId, isPrivate)
-  console.log('isPrivate: ', isPrivate)
   return res.status(HttpStatus.OK)
 })
