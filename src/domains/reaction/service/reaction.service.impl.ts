@@ -14,14 +14,18 @@ export class ReactionServiceImpl implements ReactionService {
   }
 
   async createReaction (userId: string, postId: string, type: ReactionType): Promise<ReactionDTO> {
-    if (type !== ReactionType.LIKE && type !== ReactionType.RETWEET) throw new ValidationException([{ type: 'Invalid reaction type' }]) // hacer mejor
+    if (await this.doesReactionExist(userId, postId, type)) throw new ValidationException([{ message: 'Reaction already exists' }])
     return await this.repository.create(userId, postId, type)
   }
 
   async deleteReaction (userId: string, postId: string, type: ReactionType): Promise<void> {
-    if (type !== ReactionType.LIKE && type !== ReactionType.RETWEET) throw new ValidationException([{ type: 'Invalid reaction type' }]) // hacer mejor
     const reaction = await this.repository.getByIdsAndType(userId, postId, type)
     if (!reaction) throw new NotFoundException('reaction')
     await this.repository.delete(reaction.id)
+  }
+
+  async doesReactionExist (userId: string, postId: string, type: ReactionType): Promise<boolean> {
+    const reaction = await this.repository.getByIdsAndType(userId, postId, type)
+    return (reaction != null)
   }
 }

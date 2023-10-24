@@ -6,13 +6,14 @@ export class ReactionRepositoryImpl implements ReactionRepository {
   constructor (private readonly db: PrismaClient) {}
 
   async create (userId: string, postId: string, type: ReactionType): Promise<ReactionDTO> {
-    return await this.db.reaction.create({
+    const reaction = await this.db.reaction.create({
       data: {
         userId,
         postId,
         type
       }
     }).then(reaction => new ReactionDTO(reaction))
+    return reaction
   }
 
   async delete (reactionId: any): Promise<void> {

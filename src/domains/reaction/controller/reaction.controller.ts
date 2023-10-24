@@ -43,8 +43,8 @@ reactionRouter.post('/:postId', async (req: Request, res: Response) => {
   const { postId } = req.params
   const { type } = req.body
 
-  await service.createReaction(userId, postId, type)
-  return res.status(HttpStatus.OK)
+  const reaction = await service.createReaction(userId, postId, type)
+  return res.status(HttpStatus.OK).json(reaction)
 })
 
 /**
@@ -78,5 +78,5 @@ reactionRouter.delete('/:postId', async (req: Request, res: Response) => {
   const { type } = req.body
 
   await service.deleteReaction(userId, postId, type)
-  return res.status(HttpStatus.OK)
+  return res.status(HttpStatus.OK).send({ message: `Deleted reaction ${type} in post ${postId}` })
 })
