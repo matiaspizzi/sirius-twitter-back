@@ -1,2 +1,2 @@
-export * from './post.repository'
-export * from './post.repository.impl'
+export * from './comment.repository'
+export * from './comment.repository.impl'

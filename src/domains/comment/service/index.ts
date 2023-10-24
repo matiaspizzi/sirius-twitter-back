@@ -1,2 +1,2 @@
-export * from './post.service'
-export * from './post.service.impl'
+export * from './comment.service'
+export * from './comment.service.impl'

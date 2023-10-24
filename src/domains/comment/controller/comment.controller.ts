@@ -5,14 +5,14 @@ import 'express-async-errors'
 
 import { db, BodyValidation } from '@utils'
 
-import { PostRepositoryImpl } from '../repository'
-import { PostService, PostServiceImpl } from '../service'
-import { CreatePostInputDTO } from '../dto'
+import { CommentRepositoryImpl } from '../repository'
+import { CommentService, CommentServiceImpl } from '../service'
+import { CreateCommentInputDTO } from '../dto'
 
-export const postRouter = Router()
+export const commentRouter = Router()
 
 // Use dependency injection
-const service: PostService = new PostServiceImpl(new PostRepositoryImpl(db))
+const service: CommentService = new CommentServiceImpl(new CommentRepositoryImpl(db))
 
 /**
  * @swagger
@@ -49,11 +49,11 @@ const service: PostService = new PostServiceImpl(new PostRepositoryImpl(db))
  *             schema:
  *               $ref: '#/components/schemas/Post'
  */
-postRouter.get('/', async (req: Request, res: Response) => {
+commentRouter.get('/', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { limit, before, after } = req.query as Record<string, string>
 
-  const posts = await service.getLatestPosts(userId, { limit: Number(limit), before, after })
+  const comments = await service.getLatestPosts(userId, { limit: Number(limit), before, after })
 
   return res.status(HttpStatus.OK).json(posts)
 })
@@ -81,11 +81,11 @@ postRouter.get('/', async (req: Request, res: Response) => {
  *             schema:
  *               $ref: '#/components/schemas/Post'
  */
-postRouter.get('/:postId', async (req: Request, res: Response) => {
+commentRouter.get('/:commentId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
-  const { postId } = req.params
+  const { commentId } = req.params
 
-  const post = await service.getPost(userId, postId)
+  const post = await service.getPost(userId, commentId)
 
   return res.status(HttpStatus.OK).json(post)
 })
@@ -113,13 +113,13 @@ postRouter.get('/:postId', async (req: Request, res: Response) => {
  *             schema:
  *               $ref: '#/components/schemas/Post'
  */
-postRouter.get('/by_user/:userId', async (req: Request, res: Response) => {
+commentRouter.get('/by_user/:userId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { userId: authorId } = req.params
 
-  const posts = await service.getPostsByAuthor(userId, authorId)
+  const comments = await service.getCommentsByAuthor(userId, authorId)
 
-  return res.status(HttpStatus.OK).json(posts)
+  return res.status(HttpStatus.OK).json(comments)
 })
 
 /**
@@ -144,13 +144,13 @@ postRouter.get('/by_user/:userId', async (req: Request, res: Response) => {
  *             schema:
  *               $ref: '#/components/schemas/Post'
  */
-postRouter.post('/', BodyValidation(CreatePostInputDTO), async (req: Request, res: Response) => {
+commentRouter.post('/', BodyValidation(CreateCommentInputDTO), async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const data = req.body
 
-  const post = await service.createPost(userId, data)
+  const comment = await service.createComment(userId, data)
 
-  return res.status(HttpStatus.CREATED).json(post)
+  return res.status(HttpStatus.CREATED).json(comment)
 })
 
 /**
@@ -176,11 +176,11 @@ postRouter.post('/', BodyValidation(CreatePostInputDTO), async (req: Request, re
  *             example:
  *               message: Deleted post {post_id}
  */
-postRouter.delete('/:postId', async (req: Request, res: Response) => {
+commentRouter.delete('/:commentId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
-  const { postId } = req.params
+  const { commentId } = req.params
 
-  await service.deletePost(userId, postId)
+  await service.deletePost(userId, commentId)
 
-  return res.status(HttpStatus.OK).send({ message: `Deleted post ${postId}` })
+  return res.status(HttpStatus.OK).send({ message: `Deleted comment ${commentId}` })
 })
