@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express'
 import HttpStatus from 'http-status'
-// express-async-errors is a module that handles async errors in express, don't forget import it in your new controllers
 import 'express-async-errors'
+import { upload } from '@utils/multer'
 
 import { db } from '@utils'
 
@@ -151,4 +151,12 @@ userRouter.post('/private/:isPrivate', async (req: Request, res: Response) => {
 
   await service.setPrivate(userId, isPrivate)
   return res.status(HttpStatus.OK)
+})
+
+userRouter.post('/avatar', async (req: Request, res: Response) => {
+  const { userId } = res.locals.context
+  console.log(req.files)
+
+  // await service.setAvatar(userId, file)
+  return res.status(HttpStatus.OK).json(req)
 })

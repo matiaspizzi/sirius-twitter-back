@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 import { OffsetPagination } from '@types'
 import { ExtendedUserDTO, UserDTO } from '../dto'
 import { UserRepository } from './user.repository'
-
+import { uploadS3File, deleteS3File } from '@utils/s3'
 export class UserRepositoryImpl implements UserRepository {
   constructor (private readonly db: PrismaClient) {}
 
@@ -68,5 +68,10 @@ export class UserRepositoryImpl implements UserRepository {
         isPrivate: isPrivate
       }
     })
+  }
+
+  async setAvatar (userId: any, avatar: any): Promise<void> {
+    const upload = await uploadS3File(avatar)
+    console.log(upload)
   }
 }

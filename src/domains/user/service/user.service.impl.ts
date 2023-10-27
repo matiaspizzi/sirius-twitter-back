@@ -28,4 +28,10 @@ export class UserServiceImpl implements UserService {
     isPrivate === 'true' ? set = true : set = false
     await this.repository.setPrivate(userId, set)
   }
+
+  async setAvatar (userId: any, avatar: any): Promise<void> {
+    if(avatar === undefined) throw new Error('No avatar provided')
+
+    await this.repository.setAvatar(userId, avatar)
+  }
 }
