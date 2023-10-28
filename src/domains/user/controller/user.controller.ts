@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express'
 import HttpStatus from 'http-status'
-import 'express-async-errors'
 import { upload } from '@utils/multer'
+import 'express-async-errors'
 
 import { db } from '@utils'
 
@@ -153,10 +153,9 @@ userRouter.post('/private/:isPrivate', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK)
 })
 
-userRouter.post('/avatar', async (req: Request, res: Response) => {
+userRouter.post('/avatar', upload.single('avatar'), async (req: Request, res: Response) => {
   const { userId } = res.locals.context
-  console.log(req.files)
-
-  // await service.setAvatar(userId, file)
-  return res.status(HttpStatus.OK).json(req)
+  const { file } = req
+  const imageId = await service.setAvatar(userId, file)
+  if (imageId) return res.status(HttpStatus.OK).send({ imageId, userId })
 })

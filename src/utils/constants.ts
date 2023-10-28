@@ -21,11 +21,20 @@ export class Constants {
   static LOG_LEVEL: LogLevel = (process.env.LOG_LEVEL as LogLevel) || LogLevel.INFO
 
   // Port to run the server in
-  static PORT: string = process.env.PORT ?? '8080'
+  static PORT: string = process.env.PORT ?? '3030'
 
   // CORS urls to allow
   static CORS_WHITELIST: string = process.env.CORS_WHITELIST ?? '*'
 
   // Authentication secret
   static TOKEN_SECRET: string = process.env.TOKEN_SECRET ?? 'secret'
+
+  // AWS S3
+  static BUCKET_NAME: string = process.env.BUCKET_NAME ?? 'twitter-clone-bucket'
+
+  static BUCKET_REGION: string = process.env.BUCKET_REGION ?? 'us-east-1'
+
+  static BUCKET_ACCESS_KEY_ID: string = process.env.BUCKET_ACCESS_KEY_ID ?? 'accessKeyId'
+
+  static SECRET_ACCESS_KEY: string = process.env.SECRET_ACCESS_KEY ?? 'secretAccessKey'
 }

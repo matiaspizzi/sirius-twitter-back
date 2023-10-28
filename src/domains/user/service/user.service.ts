@@ -2,9 +2,9 @@ import { OffsetPagination } from '@types'
 import { UserDTO } from '../dto'
 
 export interface UserService {
-  deleteUser: (userId: any) => Promise<void>
-  getUser: (userId: any) => Promise<UserDTO>
+  deleteUser: (userId: string) => Promise<void>
+  getUser: (userId: string) => Promise<UserDTO>
   getUserRecommendations: (userId: any, options: OffsetPagination) => Promise<UserDTO[]>
-  setPrivate: (userId: any, isPrivate: string) => Promise<void>
-  setAvatar: (userId: any, avatar: any) => Promise<void>
+  setPrivate: (userId: string, isPrivate: string) => Promise<void>
+  setAvatar: (userId: string, avatar: any) => Promise<string | undefined>
 }

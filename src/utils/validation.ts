@@ -19,9 +19,9 @@ export function BodyValidation<T> (target: ClassType<T>) {
 }
 
 // a function that validates if the query param "type" is a valid ReactionType
-export function ReactionTypeValidation (req: Request, res: Response, next: NextFunction) {
+export function ReactionTypeValidation (req: Request, res: Response, next: NextFunction): void {
   const { type } = req.query
-  if (type && !['LIKE', 'RETWEET'].includes(type as string)) {
+  if (type !== undefined && !['LIKE', 'RETWEET'].includes(type as string)) {
     throw new ValidationException([{ message: 'Invalid reaction type, should be LIKE or RETWEET' }])
   }
   next()

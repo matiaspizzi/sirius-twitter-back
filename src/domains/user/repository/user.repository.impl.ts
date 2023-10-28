@@ -3,7 +3,6 @@ import { PrismaClient } from '@prisma/client'
 import { OffsetPagination } from '@types'
 import { ExtendedUserDTO, UserDTO } from '../dto'
 import { UserRepository } from './user.repository'
-import { uploadS3File, deleteS3File } from '@utils/s3'
 export class UserRepositoryImpl implements UserRepository {
   constructor (private readonly db: PrismaClient) {}
 
@@ -13,7 +12,7 @@ export class UserRepositoryImpl implements UserRepository {
     }).then(user => new UserDTO(user))
   }
 
-  async getById (userId: any): Promise<UserDTO | null> {
+  async getById (userId: string): Promise<UserDTO | null> {
     const user = await this.db.user.findUnique({
       where: {
         id: userId
@@ -22,7 +21,7 @@ export class UserRepositoryImpl implements UserRepository {
     return user ? new UserDTO(user) : null
   }
 
-  async delete (userId: any): Promise<void> {
+  async delete (userId: string): Promise<void> {
     await this.db.user.delete({
       where: {
         id: userId
@@ -59,19 +58,25 @@ export class UserRepositoryImpl implements UserRepository {
     return user ? new ExtendedUserDTO(user) : null
   }
 
-  async setPrivate (userId: any, isPrivate: boolean): Promise<void> {
+  async setPrivate (userId: string, isPrivate: boolean): Promise<void> {
     await this.db.user.update({
       where: {
         id: userId
       },
       data: {
-        isPrivate: isPrivate
+        isPrivate
       }
     })
   }
 
-  async setAvatar (userId: any, avatar: any): Promise<void> {
-    const upload = await uploadS3File(avatar)
-    console.log(upload)
+  async setAvatar (userId: string, profilePicture: string): Promise<void> {
+    await this.db.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        profilePicture
+      }
+    })
   }
 }

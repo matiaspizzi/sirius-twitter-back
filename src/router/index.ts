@@ -47,6 +47,9 @@ router.use('/comment', withAuth, commentRouter)
  *         email:
  *           type: string
  *           description: Unique email
+ *         profilePicture:
+ *           type: string
+ *           description: User's profile picture identifier
  *         password:
  *           type: string
  *           description: Hashed password

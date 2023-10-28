@@ -4,12 +4,14 @@ export class UserDTO {
     this.name = user.name
     this.isPrivate = user.isPrivate
     this.createdAt = user.createdAt
+    this.profilePicture = user.profilePicture
   }
 
   id: string
   name: string | null
   isPrivate: boolean
   createdAt: Date
+  profilePicture?: string | null
 }
 
 export class ExtendedUserDTO extends UserDTO {

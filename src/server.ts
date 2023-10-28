@@ -8,6 +8,8 @@ import { Constants, NodeEnv, Logger } from '@utils'
 import { router } from '@router'
 import { ErrorHandling } from '@utils/errors'
 
+import { specs } from '@utils/swagger'
+
 const app = express()
 
 // Set up request logger
@@ -35,7 +37,6 @@ app.listen(Constants.PORT, () => {
   Logger.info(`Server listening on port ${Constants.PORT}`)
 })
 
-import { specs } from '@utils/swagger'
 app.use(
   '/docs',
   swaggerUi.serve,
