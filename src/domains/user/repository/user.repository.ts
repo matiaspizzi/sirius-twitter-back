@@ -9,5 +9,6 @@ export interface UserRepository {
   getById: (userId: string) => Promise<UserDTO | null>
   getByEmailOrUsername: (email?: string, username?: string) => Promise<ExtendedUserDTO | null>
   setPrivate: (userId: string, isPrivate: boolean) => Promise<void>
-  setAvatar: (userId: string, profilePicture: string) => Promise<void>
+  setProfilePicture: (userId: string, profilePicture: string) => Promise<void>
+  getProfilePicture: (userId: string) => Promise<string | null>
 }

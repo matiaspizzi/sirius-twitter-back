@@ -69,7 +69,7 @@ export class UserRepositoryImpl implements UserRepository {
     })
   }
 
-  async setAvatar (userId: string, profilePicture: string): Promise<void> {
+  async setProfilePicture (userId: string, profilePicture: string): Promise<void> {
     await this.db.user.update({
       where: {
         id: userId
@@ -78,5 +78,14 @@ export class UserRepositoryImpl implements UserRepository {
         profilePicture
       }
     })
+  }
+
+  async getProfilePicture (userId: string): Promise<string | null> {
+    const user = await this.db.user.findUnique({
+      where: {
+        id: userId
+      }
+    })
+    return user ? user.profilePicture : null
   }
 }

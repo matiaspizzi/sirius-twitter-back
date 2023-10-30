@@ -1,4 +1,5 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Constants } from './constants'
 import crypto from 'crypto'
 
@@ -26,19 +27,14 @@ const uploadS3Image = async (file: any): Promise<string | undefined> => {
   return name
 }
 
-// const deleteS3File = async (file: any): Promise<DeleteObjectCommandOutput | undefined> => {
-//   const params = {
-//     Bucket: Constants.BUCKET_NAME,
-//     Key: fileName
-//   }
+const getS3ImageSignedUrl = async (key: string): Promise<string | null> => {
+  const params = {
+    Bucket: Constants.BUCKET_NAME,
+    Key: key
+  }
+  const command = new GetObjectCommand(params)
+  const url = await getSignedUrl(s3, command, { expiresIn: 3600 })
+  return url
+}
 
-//   try {
-//     const result = await s3.send(new DeleteObjectCommand(params))
-//     console.log(result)
-//     return result
-//   } catch (err) {
-//     console.log(err)
-//   }
-// }
-
-export { uploadS3Image }
+export { uploadS3Image, getS3ImageSignedUrl }

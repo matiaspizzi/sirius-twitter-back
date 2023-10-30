@@ -153,9 +153,16 @@ userRouter.post('/private/:isPrivate', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK)
 })
 
-userRouter.post('/avatar', upload.single('avatar'), async (req: Request, res: Response) => {
+userRouter.post('/profilePicture', upload.single('profilePicture'), async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { file } = req
-  const imageId = await service.setAvatar(userId, file)
-  if (imageId) return res.status(HttpStatus.OK).send({ imageId, userId })
+  const imageId = await service.setProfilePicture(userId, file)
+  if (imageId !== null) return res.status(HttpStatus.OK).send({ imageId, userId })
+})
+
+userRouter.get('/profilePicture/:userId', async (req: Request, res: Response) => {
+  const { userId } = req.params
+  const profilePicture = await service.getProfilePicture(userId)
+  if (profilePicture !== null) return res.status(HttpStatus.OK).send({ userId, profilePicture })
+  else return res.status(HttpStatus.NOT_FOUND).send({ message: 'User has no profile picture' })
 })
