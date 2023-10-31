@@ -184,3 +184,8 @@ postRouter.delete('/:postId', async (req: Request, res: Response) => {
 
   return res.status(HttpStatus.OK).send({ message: `Deleted post ${postId}` })
 })
+
+postRouter.get('/image/presignedUrl', async (req: Request, res: Response) => {
+  const data = await service.setPostImage()
+  if (data !== null) return res.status(HttpStatus.OK).send({ data })
+})

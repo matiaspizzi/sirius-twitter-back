@@ -1,6 +1,7 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Constants } from './constants'
+import crypto from 'crypto'
 
 const config = {
   region: Constants.BUCKET_REGION,
@@ -12,14 +13,16 @@ const config = {
 
 const s3 = new S3Client(config)
 
-const generateS3UploadUrl = async (userId: string, filename: string): Promise<string> => {
+const generateS3UploadUrl = async (): Promise<{presignedUrl: string, filename: string}> => {
+  const filename = crypto.randomBytes(16).toString('hex')
   const command = new PutObjectCommand({
     Bucket: process.env.BUCKET_NAME,
-    Key: filename
+    Key: `${filename}.jpeg`,
+    ContentType: 'image/jpeg'
   })
 
-  const url = await getSignedUrl(s3, command, { expiresIn: 3600 })
-  return url
+  const presignedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 })
+  return ({ presignedUrl, filename })
 }
 
 export { generateS3UploadUrl }

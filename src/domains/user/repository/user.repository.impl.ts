@@ -12,13 +12,13 @@ export class UserRepositoryImpl implements UserRepository {
     }).then(user => new UserDTO(user))
   }
 
-  async getById (userId: string): Promise<UserDTO | null> {
+  async getById (userId: string): Promise<ExtendedUserDTO | null> {
     const user = await this.db.user.findUnique({
       where: {
         id: userId
       }
     })
-    return user ? new UserDTO(user) : null
+    return user ? new ExtendedUserDTO(user) : null
   }
 
   async delete (userId: string): Promise<void> {
@@ -78,5 +78,14 @@ export class UserRepositoryImpl implements UserRepository {
         profilePicture: pictureUrl
       }
     })
+  }
+
+  async getProfilePicture (userId: string): Promise<string | null> {
+    const user = await this.db.user.findUnique({
+      where: {
+        id: userId
+      }
+    })
+    return user?.profilePicture ?? null
   }
 }

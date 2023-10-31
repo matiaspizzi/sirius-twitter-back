@@ -11,7 +11,7 @@ export class UserDTO {
   name: string | null
   isPrivate: boolean
   createdAt: Date
-  profilePicture?: string | null
+  profilePicture: string | null
 }
 
 export class ExtendedUserDTO extends UserDTO {
@@ -34,7 +34,7 @@ export class UserViewDTO {
   }
 
   id: string
-  name: string
+  name: string | null
   username: string
   profilePicture: string | null
 }

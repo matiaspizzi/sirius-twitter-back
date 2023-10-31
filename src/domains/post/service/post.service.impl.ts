@@ -8,6 +8,8 @@ import { UserRepositoryImpl } from '@domains/user/repository'
 import { validate } from 'class-validator'
 import { ForbiddenException, NotFoundException, db } from '@utils'
 import { CursorPagination } from '@types'
+import { generateS3UploadUrl } from '@utils/s3'
+import { Constants } from '@utils'
 
 const followerService = new FollowerServiceImpl(new FollowerRepositoryImpl(db))
 const userService = new UserServiceImpl(new UserRepositoryImpl(db))
@@ -56,5 +58,10 @@ export class PostServiceImpl implements PostService {
     const author = await userService.getUser(authorId)
     if (!doesFollowExist && author.isPrivate) throw new NotFoundException('post')
     return await this.repository.getByAuthorId(authorId)
+  }
+
+  async setPostImage (): Promise<{presignedUrl: string, filename: string}> {
+    const presignedData = await generateS3UploadUrl()
+    return presignedData
   }
 }

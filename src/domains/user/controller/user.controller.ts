@@ -69,7 +69,7 @@ userRouter.get('/', async (req: Request, res: Response) => {
 userRouter.get('/me', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
 
-  const user = await service.getUser(userId)
+  const user = await service.getUserView(userId)
 
   return res.status(HttpStatus.OK).json(user)
 })
@@ -121,11 +121,16 @@ userRouter.post('/private/:isPrivate', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK)
 })
 
-userRouter.get('/preSignedUrl/:filename', async (req: Request, res: Response) => {
+userRouter.get('/profilePicture/presignedUrl', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
-  const { filename } = req.params
-  const preSignedUrl = await service.setProfilePicture(userId, filename)
+  const preSignedUrl = await service.setProfilePicture(userId)
   if (preSignedUrl !== null) return res.status(HttpStatus.OK).send({ preSignedUrl })
+})
+
+userRouter.get('/profilePicture', async (req: Request, res: Response) => {
+  const { userId } = res.locals.context
+  const profilePictureUrl = await service.getProfilePicture(userId)
+  if (profilePictureUrl !== null) return res.status(HttpStatus.OK).send({ profilePictureUrl })
 })
 
 /**
@@ -154,7 +159,7 @@ userRouter.get('/preSignedUrl/:filename', async (req: Request, res: Response) =>
 userRouter.get('/:userId', async (req: Request, res: Response) => {
   const { userId: otherUserId } = req.params
 
-  const user = await service.getUser(otherUserId)
+  const user = await service.getUserView(otherUserId)
 
   return res.status(HttpStatus.OK).json(user)
 })
