@@ -1,6 +1,5 @@
 import { Request, Response, Router } from 'express'
 import HttpStatus from 'http-status'
-import { upload } from '@utils/multer'
 import 'express-async-errors'
 
 import { db } from '@utils'
@@ -77,37 +76,6 @@ userRouter.get('/me', async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /api/user/:user_id:
- *   get:
- *     security:
- *       - bearer: []
- *     summary: Get user by id
- *     tags: [User]
- *     parameters:
- *       - in: path
- *         name: user_id
- *         schema:
- *           type: string
- *         required: true
- *         description: The user id
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- */
-userRouter.get('/:userId', async (req: Request, res: Response) => {
-  const { userId: otherUserId } = req.params
-
-  const user = await service.getUser(otherUserId)
-
-  return res.status(HttpStatus.OK).json(user)
-})
-
-/**
- * @swagger
  * /api/user:
  *   delete:
  *     security:
@@ -153,16 +121,40 @@ userRouter.post('/private/:isPrivate', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK)
 })
 
-userRouter.post('/profilePicture', upload.single('profilePicture'), async (req: Request, res: Response) => {
+userRouter.get('/preSignedUrl/:filename', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
-  const { file } = req
-  const imageId = await service.setProfilePicture(userId, file)
-  if (imageId !== null) return res.status(HttpStatus.OK).send({ imageId, userId })
+  const { filename } = req.params
+  const preSignedUrl = await service.setProfilePicture(userId, filename)
+  if (preSignedUrl !== null) return res.status(HttpStatus.OK).send({ preSignedUrl })
 })
 
-userRouter.get('/profilePicture/:userId', async (req: Request, res: Response) => {
-  const { userId } = req.params
-  const profilePicture = await service.getProfilePicture(userId)
-  if (profilePicture !== null) return res.status(HttpStatus.OK).send({ userId, profilePicture })
-  else return res.status(HttpStatus.NOT_FOUND).send({ message: 'User has no profile picture' })
+/**
+ * @swagger
+ * /api/user/:user_id:
+ *   get:
+ *     security:
+ *       - bearer: []
+ *     summary: Get user by id
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user id
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+userRouter.get('/:userId', async (req: Request, res: Response) => {
+  const { userId: otherUserId } = req.params
+
+  const user = await service.getUser(otherUserId)
+
+  return res.status(HttpStatus.OK).json(user)
 })

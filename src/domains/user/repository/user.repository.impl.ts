@@ -69,23 +69,14 @@ export class UserRepositoryImpl implements UserRepository {
     })
   }
 
-  async setProfilePicture (userId: string, profilePicture: string): Promise<void> {
+  async setProfilePicture (userId: string, pictureUrl: string): Promise<void> {
     await this.db.user.update({
       where: {
         id: userId
       },
       data: {
-        profilePicture
+        profilePicture: pictureUrl
       }
     })
-  }
-
-  async getProfilePicture (userId: string): Promise<string | null> {
-    const user = await this.db.user.findUnique({
-      where: {
-        id: userId
-      }
-    })
-    return user ? user.profilePicture : null
   }
 }

@@ -3,7 +3,7 @@ import { OffsetPagination } from 'types'
 import { UserDTO } from '../dto'
 import { UserRepository } from '../repository'
 import { UserService } from './user.service'
-import { uploadS3Image, getS3ImageSignedUrl } from '@utils/s3'
+import { generateS3UploadUrl } from '@utils/s3'
 
 export class UserServiceImpl implements UserService {
   constructor (private readonly repository: UserRepository) {}
@@ -30,21 +30,10 @@ export class UserServiceImpl implements UserService {
     await this.repository.setPrivate(userId, set)
   }
 
-  async setProfilePicture (userId: string, profilePicture: any): Promise<string | null> {
-    if (profilePicture === undefined) throw new Error('No profile picture provided')
-    if (profilePicture.mimetype !== 'image/jpeg' && profilePicture.mimetype !== 'image/png') throw new Error('Profile picture must be a jpeg or png')
-    const uploaded = await uploadS3Image(profilePicture)
-    if (uploaded) {
-      await this.repository.setProfilePicture(userId, uploaded)
-      return uploaded
-    } else {
-      throw new Error('Error uploading image')
-    }
-  }
-
-  async getProfilePicture (userId: string): Promise<string | null> {
-    const profilePictureId = await this.repository.getProfilePicture(userId)
-    if (profilePictureId !== null) return await getS3ImageSignedUrl(profilePictureId)
-    else return null
+  async setProfilePicture (userId: string, filename: string): Promise<string | null> {
+    const preSignedUrl = await generateS3UploadUrl(userId, filename)
+    console.log(preSignedUrl)
+    // await this.repository.setProfilePicture(userId, preSignedUrl)
+    return preSignedUrl
   }
 }
