@@ -40,8 +40,9 @@ const service: CommentService = new CommentServiceImpl(new CommentRepositoryImpl
 commentRouter.get('/:postId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { postId } = req.params
+  const { limit, before, after } = req.query as Record<string, string>
 
-  const comments = await service.getCommentsByPost(userId, postId)
+  const comments = await service.getCommentsByPost(userId, postId, { limit: Number(limit), before, after })
 
   return res.status(HttpStatus.OK).json(comments)
 })

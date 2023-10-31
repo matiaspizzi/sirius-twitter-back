@@ -1,7 +1,8 @@
 import { PrismaClient } from '@prisma/client'
 import { CommentRepository } from '.'
 import { CreateCommentInputDTO } from '../dto'
-import { PostDTO } from '@domains/post/dto'
+import { PostDTO, ExtendedPostDTO } from '@domains/post/dto'
+import { CursorPagination } from '@types'
 
 export class CommentRepositoryImpl implements CommentRepository {
   constructor (private readonly db: PrismaClient) {}
@@ -17,19 +18,28 @@ export class CommentRepositoryImpl implements CommentRepository {
     return new PostDTO(comment)
   }
 
-  async getAllByPostId (postId: string): Promise<PostDTO[]> {
+  async getAllByPostId (postId: string, options: CursorPagination): Promise<ExtendedPostDTO[]> {
     const comments = await this.db.post.findMany({
       where: {
         isComment: true,
         parentId: postId
-      },
+      },     
+      include: {
+        author: true
+      }, 
+      cursor: options.after ? { id: options.after } : (options.before) ? { id: options.before } : undefined,
+      skip: options.after ?? options.before ? 1 : undefined,
+      take: options.limit ? (options.before ? -options.limit : options.limit) : undefined,
       orderBy: [
         {
-          createdAt: 'asc'
+          qtyLikes: 'desc'
+        },
+        {
+          qtyRetweets: 'desc'
         }
       ]
     })
-    return comments.map(comment => new PostDTO(comment))
+    return comments.map(comment => new ExtendedPostDTO(comment))
   }
 
   async delete (commentId: string): Promise<void> {

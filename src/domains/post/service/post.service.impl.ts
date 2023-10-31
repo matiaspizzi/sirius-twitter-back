@@ -9,7 +9,6 @@ import { validate } from 'class-validator'
 import { ForbiddenException, NotFoundException, db } from '@utils'
 import { CursorPagination } from '@types'
 import { generateS3UploadUrl } from '@utils/s3'
-import { Constants } from '@utils'
 
 const followerService = new FollowerServiceImpl(new FollowerRepositoryImpl(db))
 const userService = new UserServiceImpl(new UserRepositoryImpl(db))
@@ -63,5 +62,29 @@ export class PostServiceImpl implements PostService {
   async setPostImage (): Promise<{presignedUrl: string, filename: string}> {
     const presignedData = await generateS3UploadUrl()
     return presignedData
+  }
+
+  async addQtyLikes (postId: string): Promise<void> {
+    await this.repository.addQtyLikes(postId)
+  }
+
+  async subtractQtyLikes (postId: string): Promise<void> {
+    await this.repository.subtractQtyLikes(postId)
+  }
+
+  async addQtyRetweets (postId: string): Promise<void> {
+    await this.repository.addQtyRetweets(postId)
+  }
+
+  async subtractQtyRetweets (postId: string): Promise<void> {
+    await this.repository.subtractQtyRetweets(postId)
+  }
+
+  async addQtyComments (postId: string): Promise<void> {
+    await this.repository.addQtyComments(postId)
+  }
+
+  async subtractQtyComments (postId: string): Promise<void> {
+    await this.repository.subtractQtyComments(postId)
   }
 }

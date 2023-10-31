@@ -15,6 +15,11 @@ export class UserServiceImpl implements UserService {
     return user
   }
 
+  async getUsersByUsername (username: string, options: OffsetPagination): Promise<UserViewDTO[]> {
+    const users = await this.repository.getByUsernamePaginated(username, options)
+    return users.map(user => new UserViewDTO(user))
+  }
+
   async getUserView (userId: string): Promise<UserViewDTO> {
     const user = await this.repository.getById(userId)
     if (!user) throw new NotFoundException('user')

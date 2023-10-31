@@ -74,6 +74,15 @@ userRouter.get('/me', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).json(user)
 })
 
+userRouter.get('/by_username/:username', async (req: Request, res: Response) => {
+  const { username } = req.params
+  const { limit, before, after } = req.query as Record<string, string>
+
+  const users = await service.getUsersByUsername(username, { limit: Number(limit), before, after })
+
+  return res.status(HttpStatus.OK).json(users)
+})
+
 /**
  * @swagger
  * /api/user:

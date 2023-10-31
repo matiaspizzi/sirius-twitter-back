@@ -53,12 +53,15 @@ model Follow {
 model Post {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid // Primary Key
 
-  authorId  String     @db.Uuid // Foreign Key
-  content   String     @db.VarChar(240) // Limit the content to 240 characters
-  images    String[]
-  reactions Reaction[]
-  isComment Boolean    @default(false)
-  parentId  String?    @db.Uuid
+  authorId    String     @db.Uuid // Foreign Key
+  content     String     @db.VarChar(240) // Limit the content to 240 characters
+  images      String[]
+  reactions   Reaction[]
+  isComment   Boolean    @default(false)
+  parentId    String?    @db.Uuid
+  qtyLikes    Int        @default(0)
+  qtyRetweets Int        @default(0)
+  qtyComments Int        @default(0)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -68,7 +71,7 @@ model Post {
 
   parent    Post?    @relation("ChildToParent", fields: [parentId], references: [id])
   
-  children  Post[]   @relation("ChildToParent")
+  comments  Post[]   @relation("ChildToParent")
 }
 
 model Reaction {

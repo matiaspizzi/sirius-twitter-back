@@ -60,4 +60,82 @@ export class PostRepositoryImpl implements PostRepository {
     })
     return posts.map(post => new PostDTO(post))
   }
+
+  async addQtyLikes (postId: string): Promise<void> {
+    await this.db.post.update({
+      where: {
+        id: postId
+      },
+      data: {
+        qtyLikes: {
+          increment: 1
+        }
+      }
+    })
+  }
+
+  async subtractQtyLikes (postId: string): Promise<void> {
+    await this.db.post.update({
+      where: {
+        id: postId
+      },
+      data: {
+        qtyLikes: {
+          decrement: 1
+        }
+      }
+    })
+  }
+
+  async addQtyRetweets (postId: string): Promise<void> {
+    await this.db.post.update({
+      where: {
+        id: postId
+      },
+      data: {
+        qtyRetweets: {
+          increment: 1
+        }
+      }
+    })
+  }
+
+  async subtractQtyRetweets (postId: string): Promise<void> {
+    await this.db.post.update({
+      where: {
+        id: postId
+      },
+      data: {
+        qtyRetweets: {
+          decrement: 1
+        }
+      }
+    })
+  }
+
+  async addQtyComments (postId: string): Promise<void> {
+    await this.db.post.update({
+      where: {
+        id: postId
+      },
+      data: {
+        qtyComments: {
+          increment: 1
+        }
+      }
+    })
+  }
+
+  async subtractQtyComments (postId: string): Promise<void> {
+    await this.db.post.update({
+      where: {
+        id: postId
+      },
+      data: {
+        qtyComments: {
+          decrement: 1
+        }
+      }
+    })
+  }
 }

@@ -11,4 +11,5 @@ export interface UserRepository {
   setPrivate: (userId: string, isPrivate: boolean) => Promise<void>
   setProfilePicture: (userId: string, pictureUrl: string) => Promise<void>
   getProfilePicture: (userId: string) => Promise<string | null>
+  getByUsernamePaginated: (username: string, options: OffsetPagination) => Promise<ExtendedUserDTO[]>
 }
