@@ -1,4 +1,4 @@
-import { CreatePostInputDTO, PostDTO } from '../dto'
+import { CreatePostInputDTO, PostDTO, ExtendedPostDTO } from '../dto'
 import { PostRepository } from '../repository'
 import { PostService } from '.'
 import { FollowerRepositoryImpl } from '@domains/follower/repository'
@@ -39,19 +39,18 @@ export class PostServiceImpl implements PostService {
     return post
   }
 
-  async getLatestPosts (userId: string, options: CursorPagination): Promise<PostDTO[]> {
+  async getLatestPosts (userId: string, options: CursorPagination): Promise<ExtendedPostDTO[]> {
     // DID: filter post search to return posts from authors that the user follows
     const posts = await this.repository.getAllByDatePaginated(options)
     const filteredPosts = []
     for (const post of posts) {
-      const author = await userService.getUser(post.authorId)
-      const doesFollow = await followerService.doesFollowExist(userId, author.id)
+      const doesFollow = await followerService.doesFollowExist(userId, post.author.id)
       if (doesFollow) filteredPosts.push(post)
     }
     return filteredPosts
   }
 
-  async getPostsByAuthor (userId: any, authorId: string): Promise<PostDTO[]> {
+  async getPostsByAuthor (userId: any, authorId: string): Promise<ExtendedPostDTO[]> {
     // DID: throw exception when the author has a private profile and the user doesn't follow them
     const doesFollowExist = await followerService.doesFollowExist(userId, authorId)
     const author = await userService.getUser(authorId)
