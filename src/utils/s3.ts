@@ -13,7 +13,7 @@ const config = {
 
 const s3 = new S3Client(config)
 
-const generateS3UploadUrl = async (): Promise<{presignedUrl: string, filename: string}> => {
+const generateS3UploadUrl = async (): Promise<{ presignedUrl: string, filename: string }> => {
   const filename = crypto.randomBytes(16).toString('hex')
   const command = new PutObjectCommand({
     Bucket: process.env.BUCKET_NAME,

@@ -1341,6 +1341,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/socket.io@^3.0.2":
+  "integrity" "sha512-pu0sN9m5VjCxBZVK8hW37ZcMe8rjn4HHggBN5CbaRTvFwv5jOmuIRZEuddsBPa9Th0ts0SIo3Niukq+95cMBbQ=="
+  "resolved" "https://registry.npmjs.org/@types/socket.io/-/socket.io-3.0.2.tgz"
+  "version" "3.0.2"
+  dependencies:
+    "socket.io" "*"
+
 "@types/swagger-jsdoc@^6.0.2":
   "integrity" "sha512-Qor3ObrH9Q27VWEiyw2zfE/nNgFCrA3D6Rm8V8fwYeLikfVw4au9Je0F+88QBgeCgMKSoCx12akTEaBqacIHjw=="
   "resolved" "https://registry.npmjs.org/@types/swagger-jsdoc/-/swagger-jsdoc-6.0.2.tgz"
@@ -3872,7 +3879,7 @@
     "@socket.io/component-emitter" "~3.1.0"
     "debug" "~4.3.1"
 
-"socket.io@^4.7.2":
+"socket.io@*", "socket.io@^4.7.2":
   "integrity" "sha512-bvKVS29/I5fl2FGLNHuXlQaUH/BlzX1IN6S+NKLNZpBsPZIDH+90eQmCs2Railn4YUiww4SzUedJ6+uzwFnKLw=="
   "resolved" "https://registry.npmjs.org/socket.io/-/socket.io-4.7.2.tgz"
   "version" "4.7.2"
