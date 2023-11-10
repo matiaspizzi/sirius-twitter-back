@@ -1,6 +1,6 @@
 import { NotFoundException } from '@utils/errors'
 import { OffsetPagination, CursorPagination } from 'types'
-import { UserDTO, UserViewDTO, ExtendedUserDTO } from '../dto'
+import { UserViewDTO, ExtendedUserDTO } from '../dto'
 import { UserRepository } from '../repository'
 import { UserService } from './user.service'
 import { generateS3UploadUrl } from '@utils/s3'
@@ -37,18 +37,18 @@ export class UserServiceImpl implements UserService {
     await this.repository.delete(userId)
   }
 
-  async setPrivate (userId: string, isPrivate: string): Promise<void> {
+  async setPrivate (userId: string, isPrivate: string): Promise<boolean> {
     if (isPrivate !== 'true' && isPrivate !== 'false') throw new Error('The parameter must be true or false')
     let set: boolean
     isPrivate === 'true' ? set = true : set = false
-    await this.repository.setPrivate(userId, set)
+    return await this.repository.setPrivate(userId, set)
   }
 
-  async setProfilePicture (userId: string): Promise<string | null> {
+  async setProfilePicture (userId: string): Promise<{ presignedUrl: string, profilePictureUrl: string }> {
     const data = await generateS3UploadUrl()
     const url = `https://${Constants.BUCKET_NAME}.s3.amazonaws.com/${data.filename}.jpeg`
     await this.repository.setProfilePicture(userId, url)
-    return data.presignedUrl
+    return {presignedUrl: data.presignedUrl, profilePictureUrl: url }
   }
 
   async getProfilePicture (userId: string): Promise<string | null> {

@@ -126,8 +126,8 @@ userRouter.post('/private/:isPrivate', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { isPrivate } = req.params
 
-  await service.setPrivate(userId, isPrivate)
-  return res.status(HttpStatus.OK)
+  const setted = await service.setPrivate(userId, isPrivate)
+  return res.status(HttpStatus.OK).send({ private: setted })
 })
 
 userRouter.get('/profilePicture/presignedUrl', async (req: Request, res: Response) => {

@@ -46,8 +46,10 @@ io.on('connection', (socket: Socket) => {
     console.log(data)
     const parsedData = JSON.parse(data)
     console.log(parsedData.receiverId)
-    // console.log(`user ${socket.userId} sent message to ${receiverId}`)
-    // const message = await messageService.sendMessage(socket.userId, receiverId, content)
-    // io.emit("newMessage", message)
+    const message = await messageService.sendMessage(socket.userId, parsedData.receiverId, parsedData.content)
+    io.emit("newMessage", message)
   })
 })
+
+// front: getMessages, back: envia messages para el front con messages
+// front: sendMessage, back: envia message para el front con newMessage

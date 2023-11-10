@@ -7,7 +7,7 @@ export interface UserService {
   getUsersByUsername: (username: string, options: CursorPagination) => Promise<UserViewDTO[]>
   getUserView: (userId: string) => Promise<UserViewDTO>
   getUserRecommendations: (userId: any, options: OffsetPagination) => Promise<UserViewDTO[]>
-  setPrivate: (userId: string, isPrivate: string) => Promise<void>
-  setProfilePicture: (userId: string) => Promise<string | null>
+  setPrivate: (userId: string, isPrivate: string) => Promise<boolean>
+  setProfilePicture: (userId: string) => Promise<{ presignedUrl: string, profilePictureUrl: string }>
   getProfilePicture: (userId: string) => Promise<string | null>
 }

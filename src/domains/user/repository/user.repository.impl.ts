@@ -76,8 +76,8 @@ export class UserRepositoryImpl implements UserRepository {
     return user ? new ExtendedUserDTO(user) : null
   }
 
-  async setPrivate (userId: string, isPrivate: boolean): Promise<void> {
-    await this.db.user.update({
+  async setPrivate (userId: string, isPrivate: boolean): Promise<boolean> {
+    const user = await this.db.user.update({
       where: {
         id: userId
       },
@@ -85,6 +85,8 @@ export class UserRepositoryImpl implements UserRepository {
         isPrivate
       }
     })
+
+    return (user.isPrivate)
   }
 
   async setProfilePicture (userId: string, pictureUrl: string): Promise<void> {
