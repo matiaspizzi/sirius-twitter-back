@@ -7,7 +7,15 @@ const mockRepository = {
     getById: jest.fn(),
     getByIdsAndType: jest.fn(),
     getByUserAndType: jest.fn(),
-    getByPostId: jest.fn()
+    getByPostId: jest.fn(),
+    doesReactionExist: jest.fn()
+}
+
+const mockPostRepository = {
+    addQtyLikes: jest.fn(),
+    addQtyRetweets: jest.fn(),
+    subtractQtyLikes: jest.fn(),
+    subtractQtyRetweets: jest.fn()
 }
 
 const service = new ReactionServiceImpl(mockRepository)
@@ -49,13 +57,17 @@ describe('ReactionServiceImpl', () => {
 
     it('createReaction (userId: string, postId: string, type: ReactionType): Promise<ReactionDTO>', async () => {
         mockRepository.create.mockResolvedValue(mockReaction);
+        mockPostRepository.addQtyLikes.mockResolvedValue(undefined);
+        mockRepository.doesReactionExist = jest.fn().mockResolvedValue(false);
         const reaction = await service.createReaction('1', '1', 'LIKE');
         expect(reaction).toEqual(mockReaction);
         expect(mockRepository.create).toHaveBeenCalledWith('1', '1', 'LIKE');
     });
 
     it('deleteReaction (userId: string, postId: string, type: ReactionType): Promise<void>', async () => {
-        mockRepository.delete.mockResolvedValue(mockReaction);
+        mockRepository.getByIdsAndType.mockResolvedValue(mockReaction);
+        mockPostRepository.subtractQtyLikes.mockResolvedValue(undefined);
+        mockRepository.doesReactionExist = jest.fn().mockResolvedValue(true);
         const reaction = await service.deleteReaction('1', '1', 'LIKE');
         expect(reaction).toEqual(undefined);
         expect(mockRepository.delete).toHaveBeenCalledWith('1', '1', 'LIKE');
