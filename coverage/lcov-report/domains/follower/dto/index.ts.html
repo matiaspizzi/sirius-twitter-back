@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for domains/post/repository/post.repository.ts</title>
+    <title>Code coverage report for domains/follower/dto/index.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">domains/post/repository</a> post.repository.ts</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">domains/follower/dto</a> index.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">46.15% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>16/16</span>
+                <span class='fraction'>6/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">46.15% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>16/16</span>
+                <span class='fraction'>6/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -76,40 +76,31 @@
 <a name='L11'></a><a href='#L11'>11</a>
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
-<a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a>
-<a name='L16'></a><a href='#L16'>16</a>
-<a name='L17'></a><a href='#L17'>17</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L14'></a><a href='#L14'>14</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { CursorPagination } from '@types'
-import { CreatePostInputDTO, PostDTO, ExtendedPostDTO } from '../dto'
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export class FollowerDTO {
+<span class="fstat-no" title="function not covered" >  constructor (follow: FollowerDTO) {</span>
+<span class="cstat-no" title="statement not covered" >    this.id = follow.id</span>
+<span class="cstat-no" title="statement not covered" >    this.followerId = follow.followerId</span>
+<span class="cstat-no" title="statement not covered" >    this.followedId = follow.followedId</span>
+<span class="cstat-no" title="statement not covered" >    this.createdAt = follow.createdAt</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
-export interface PostRepository {
-  create: (userId: string, data: CreatePostInputDTO) =&gt; Promise&lt;PostDTO&gt;
-  getAllByDatePaginated: (options: CursorPagination) =&gt; Promise&lt;ExtendedPostDTO[]&gt;
-  delete: (postId: string) =&gt; Promise&lt;void&gt;
-  getById: (postId: string) =&gt; Promise&lt;PostDTO | null&gt;
-  getByAuthorId: (authorId: string) =&gt; Promise&lt;ExtendedPostDTO[]&gt;
-  addQtyLikes: (postId: string) =&gt; Promise&lt;void&gt;
-  subtractQtyLikes: (postId: string) =&gt; Promise&lt;void&gt;
-  addQtyRetweets: (postId: string) =&gt; Promise&lt;void&gt;
-  subtractQtyRetweets: (postId: string) =&gt; Promise&lt;void&gt;
-  addQtyComments: (postId: string) =&gt; Promise&lt;void&gt;
-  subtractQtyComments: (postId: string) =&gt; Promise&lt;void&gt;
+<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >  id: string</span></span>
+<span class="cstat-no" title="statement not covered" >  followerId: string</span>
+<span class="cstat-no" title="statement not covered" >  followedId: string</span>
+  createdAt: Date
 }
 &nbsp;</pre></td></tr></table></pre>
 

@@ -1,14 +1,14 @@
 export class UserDTO {
   constructor (user: UserDTO) {
     this.id = user.id
-    this.name = user.name
+    this.username = user.username
     this.isPrivate = user.isPrivate
     this.createdAt = user.createdAt
     this.profilePicture = user.profilePicture
   }
 
   id: string
-  name: string | null
+  username: string
   isPrivate: boolean
   createdAt: Date
   profilePicture: string | null
@@ -19,11 +19,11 @@ export class ExtendedUserDTO extends UserDTO {
     super(user)
     this.email = user.email
     this.password = user.password
-    this.username = user.username
+    this.name = user.name
   }
 
   email!: string
-  username!: string
+  name: string | null
   password!: string
 }
 export class UserViewDTO {

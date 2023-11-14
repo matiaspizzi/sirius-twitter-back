@@ -1,5 +1,6 @@
 import { ReactionDTO } from '@domains/reaction/dto';
 import { ReactionServiceImpl } from '@domains/reaction/service/reaction.service.impl'
+import { PostServiceImpl } from '@domains/post/service/post.service.impl'
 
 const mockRepository = {
     create: jest.fn(),
@@ -12,13 +13,21 @@ const mockRepository = {
 }
 
 const mockPostRepository = {
+    create: jest.fn(),
+    delete: jest.fn(),
+    getById: jest.fn(),
+    getAllByDatePaginated: jest.fn(),
+    getByAuthorId: jest.fn(),
     addQtyLikes: jest.fn(),
     addQtyRetweets: jest.fn(),
     subtractQtyLikes: jest.fn(),
-    subtractQtyRetweets: jest.fn()
+    subtractQtyRetweets: jest.fn(),
+    addQtyComments: jest.fn(),
+    subtractQtyComments: jest.fn()
 }
 
 const service = new ReactionServiceImpl(mockRepository)
+const postService = new PostServiceImpl(mockPostRepository)
 
 const mockReaction = { id: '1', userId: '1', postId: '1', type: 'LIKE' };
 
@@ -58,7 +67,7 @@ describe('ReactionServiceImpl', () => {
     it('createReaction (userId: string, postId: string, type: ReactionType): Promise<ReactionDTO>', async () => {
         mockRepository.create.mockResolvedValue(mockReaction);
         mockPostRepository.addQtyLikes.mockResolvedValue(undefined);
-        mockRepository.doesReactionExist = jest.fn().mockResolvedValue(false);
+        mockRepository.doesReactionExist.mockResolvedValue(false);
         const reaction = await service.createReaction('1', '1', 'LIKE');
         expect(reaction).toEqual(mockReaction);
         expect(mockRepository.create).toHaveBeenCalledWith('1', '1', 'LIKE');
