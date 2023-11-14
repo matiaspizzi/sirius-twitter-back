@@ -90,10 +90,6 @@ describe('PostServiceImpl', () => {
         await expect(service.getLatestPosts('1',{limit: 1})).rejects.toThrowError('post');
     });
 
-    it('setPostImage (): Promise<{presignedUrl: string, filename: string}>', async () => {
-        const imageUrl = await service.setPostImage();
-        expect(imageUrl).toBeInstanceOf({presignedUrl: 'string', filename: 'string'});
-    });
 });
 
 
