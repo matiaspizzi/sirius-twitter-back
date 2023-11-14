@@ -1,5 +1,6 @@
 // Runtime environments
 export enum NodeEnv {
+  TEST = 'test',
   DEV = 'development',
   PROD = 'production',
 }
@@ -30,7 +31,7 @@ export class Constants {
   static TOKEN_SECRET: string = process.env.TOKEN_SECRET ?? 'secret'
 
   // AWS S3
-  static BUCKET_NAME: string = process.env.BUCKET_NAME ?? 'twitter-clone-bucket'
+  static BUCKET_NAME: string = process.env.BUCKET_NAME ?? 'mnp-sirius-twitter'
 
   static BUCKET_REGION: string = process.env.BUCKET_REGION ?? 'us-east-1'
 

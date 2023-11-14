@@ -1,5 +1,5 @@
-import { ExtendedUserDTO, UserViewDTO } from '@domains/user/dto';
-import { UserServiceImpl } from '../../../../domains/user/service/user.service.impl'
+import { ExtendedUserDTO, UserViewDTO } from '../../../../src/domains/user/dto'
+import { UserServiceImpl } from '../../../../src/domains/user/service/user.service.impl'
 
 const mockRepository = {
     getById: jest.fn(),
@@ -43,13 +43,11 @@ describe('UserServiceImpl', () => {
     });
 
     it('getUsersByUsername (username: string, options: CursorPagination): Promise<UserViewDTO[]>', async () => {
-
         mockRepository.getByUsernamePaginated.mockResolvedValue(mockUsers);
 
         const users = await service.getUsersByUsername('Test User', { limit: 10, before: '1' });
 
         expect(users).toBeInstanceOf(Array<Promise<ExtendedUserDTO>>);
-
         expect(mockRepository.getByUsernamePaginated).toHaveBeenCalledWith('Test User', { limit: 10, before: '1' });
     });
 
@@ -111,7 +109,7 @@ describe('UserServiceImpl', () => {
 
     it('getProfilePicture (userId: string): Promise<string | null>', async () => {
         const data = await service.setProfilePicture('1');
-
+        mockRepository.setProfilePicture.mockResolvedValue(data.profilePictureUrl);
         expect(data.presignedUrl).toBeDefined();
         expect(data.profilePictureUrl).toBeDefined();
         expect(mockRepository.setProfilePicture).toHaveBeenCalledWith('1', data.profilePictureUrl);

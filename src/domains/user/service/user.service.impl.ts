@@ -48,7 +48,7 @@ export class UserServiceImpl implements UserService {
     const data = await generateS3UploadUrl()
     const url = `https://${Constants.BUCKET_NAME}.s3.amazonaws.com/${data.filename}.jpeg`
     await this.repository.setProfilePicture(userId, url)
-    return {presignedUrl: data.presignedUrl, profilePictureUrl: url }
+    return { presignedUrl: data.presignedUrl, profilePictureUrl: url }
   }
 
   async getProfilePicture (userId: string): Promise<string | null> {

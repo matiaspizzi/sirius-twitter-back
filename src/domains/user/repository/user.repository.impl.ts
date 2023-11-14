@@ -89,13 +89,13 @@ export class UserRepositoryImpl implements UserRepository {
     return (user.isPrivate)
   }
 
-  async setProfilePicture (userId: string, pictureUrl: string): Promise<void> {
+  async setProfilePicture (userId: string, profilePicture: string): Promise<void> {
     await this.db.user.update({
       where: {
         id: userId
       },
       data: {
-        profilePicture: pictureUrl
+        profilePicture
       }
     })
   }

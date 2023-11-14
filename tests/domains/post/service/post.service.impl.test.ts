@@ -16,13 +16,7 @@ const mockRepository = {
     subtractQtyComments: jest.fn()
 }
 
-const mockUserRepository = {
-    getUser: jest.fn(),
-    doesFollowExist: jest.fn()
-}
-
 const service = new PostServiceImpl(mockRepository)
-const userService = new UserServiceImpl(mockUserRepository)
 
 const mockPost = { id: '1', authorId: '1', content: '1', images: ['1'], createdAt: new Date(), parentId: '1', author: { id: '1', name: '1', username: '1', email: '1', createdAt: new Date(), updatedAt: new Date() }, qtyComments: 1, qtyLikes: 1, qtyRetweets: 1 }
 
@@ -89,6 +83,12 @@ describe('PostServiceImpl', () => {
         mockRepository.getAllByDatePaginated.mockResolvedValue(null);
         await expect(service.getLatestPosts('1',{limit: 1})).rejects.toThrowError('post');
     });
+
+    it('setPostImage (): Promise<{presignedUrl: string, filename: string}>', async () => {
+        const data = await service.setPostImage();
+        expect(data.filename).toBeDefined()
+        expect(data.presignedUrl).toBeDefined()
+    })
 
 });
 
