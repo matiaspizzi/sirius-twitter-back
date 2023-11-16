@@ -33,6 +33,7 @@
     "morgan": "^1.10.0",
     "signale": "^1.4.0",
     "socket.io": "^4.7.2",
+    "supertest": "^6.3.3",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   },
