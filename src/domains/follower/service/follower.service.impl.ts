@@ -8,7 +8,7 @@ export class FollowerServiceImpl implements FollowerService {
 
   async createFollow (followerId: string, followedId: string): Promise<FollowerDTO> {
     if (followerId === followedId) throw new ForbiddenException()
-    if(await this.doesFollowExist(followerId, followedId)) throw new ForbiddenException()
+    if (await this.doesFollowExist(followerId, followedId)) throw new ForbiddenException()
     return await this.repository.create(followerId, followedId)
   }
 

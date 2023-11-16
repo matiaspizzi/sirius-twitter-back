@@ -27,7 +27,6 @@ export class UserServiceImpl implements UserService {
     return userView
   }
 
-
   async getUserRecommendations (userId: string, options: OffsetPagination): Promise<UserViewDTO[]> {
     // TODO: make this return only users followed by users the original user follows
     return await this.repository.getRecommendedUsersPaginated(options)
@@ -41,7 +40,8 @@ export class UserServiceImpl implements UserService {
     if (isPrivate !== 'true' && isPrivate !== 'false') throw new Error('The parameter must be true or false')
     let set: boolean
     isPrivate === 'true' ? set = true : set = false
-    return await this.repository.setPrivate(userId, set)
+    await this.repository.setPrivate(userId, set)
+    return set
   }
 
   async setProfilePicture (userId: string): Promise<{ presignedUrl: string, profilePictureUrl: string }> {

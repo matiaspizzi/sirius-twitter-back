@@ -6,11 +6,12 @@ import { db } from '@utils'
 
 import { MessageRepositoryImpl } from '../repository'
 import { MessageService, MessageServiceImpl } from '../service'
+import { FollowerRepositoryImpl } from '@domains/follower/repository'
 
 export const messageRouter = Router()
 
 // Use dependency injection
-const service: MessageService = new MessageServiceImpl(new MessageRepositoryImpl(db))
+const service: MessageService = new MessageServiceImpl(new MessageRepositoryImpl(db), new FollowerRepositoryImpl(db))
 
 messageRouter.get('/:receiverId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
@@ -29,13 +30,4 @@ messageRouter.post('/:receiverId', async (req: Request, res: Response) => {
   const message = await service.sendMessage(userId, receiverId, content)
 
   return res.status(HttpStatus.CREATED).json(message)
-})
-
-messageRouter.delete('/messageId', async (req: Request, res: Response) => {
-  const { userId } = res.locals.context
-  const { messageId } = req.params
-
-  await service.deleteMessage(userId, messageId)
-
-  return res.status(HttpStatus.OK)
 })

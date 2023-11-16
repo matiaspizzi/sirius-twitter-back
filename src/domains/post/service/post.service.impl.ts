@@ -1,20 +1,19 @@
 import { CreatePostInputDTO, PostDTO, ExtendedPostDTO } from '../dto'
 import { PostRepository } from '../repository'
 import { PostService } from '.'
-import { FollowerRepositoryImpl } from '@domains/follower/repository'
-import { FollowerServiceImpl } from '@domains/follower/service'
-import { UserServiceImpl } from '@domains/user/service'
-import { UserRepositoryImpl } from '@domains/user/repository'
+import { FollowerRepository } from '@domains/follower/repository'
+import { UserRepository } from '@domains/user/repository'
 import { validate } from 'class-validator'
-import { ForbiddenException, NotFoundException, db } from '@utils'
+import { ForbiddenException, NotFoundException } from '@utils'
 import { CursorPagination } from '@types'
 import { generateS3UploadUrl } from '@utils/s3'
 
-const followerService = new FollowerServiceImpl(new FollowerRepositoryImpl(db))
-const userService = new UserServiceImpl(new UserRepositoryImpl(db))
-
 export class PostServiceImpl implements PostService {
-  constructor (private readonly repository: PostRepository) {}
+  constructor (
+    private readonly repository: PostRepository,
+    private readonly followerRepository: FollowerRepository,
+    private readonly userRepository: UserRepository
+  ) {}
 
   async createPost (userId: string, data: CreatePostInputDTO): Promise<PostDTO> {
     await validate(data)
@@ -31,10 +30,14 @@ export class PostServiceImpl implements PostService {
   async getPost (userId: string, postId: string): Promise<PostDTO> {
     const post = await this.repository.getById(postId)
     if (!post) throw new NotFoundException('post')
-    const author = await userService.getUser(post.authorId)
-    if (author.isPrivate) {
-      const doesFollow = await followerService.doesFollowExist(userId, author.id)
-      if (!doesFollow) throw new NotFoundException('post')
+    const author = await this.userRepository.getById(post.authorId)
+    if (author) {
+      if (author.isPrivate) {
+        const doesFollow = await this.followerRepository.getByIds(userId, author.id)
+        if (!doesFollow) throw new NotFoundException('post')
+      }
+    } else {
+      throw new NotFoundException('user')
     }
     return post
   }
@@ -44,7 +47,7 @@ export class PostServiceImpl implements PostService {
     const posts = await this.repository.getAllByDatePaginated(options)
     const filteredPosts = []
     for (const post of posts) {
-      const doesFollow = await followerService.doesFollowExist(userId, post.author.id)
+      const doesFollow = await this.followerRepository.getByIds(userId, post.author.id)
       if (doesFollow) filteredPosts.push(post)
     }
     return filteredPosts
@@ -52,13 +55,19 @@ export class PostServiceImpl implements PostService {
 
   async getPostsByAuthor (userId: any, authorId: string): Promise<ExtendedPostDTO[]> {
     // DID: throw exception when the author has a private profile and the user doesn't follow them
-    const doesFollowExist = await followerService.doesFollowExist(userId, authorId)
-    const author = await userService.getUser(authorId)
-    if (!doesFollowExist && author.isPrivate) throw new NotFoundException('post')
+    const author = await this.userRepository.getById(authorId)
+    if (author) {
+      if (author.isPrivate) {
+        const doesFollow = await this.followerRepository.getByIds(userId, author.id)
+        if (!doesFollow) throw new NotFoundException('post')
+      }
+    } else {
+      throw new NotFoundException('user')
+    }
     return await this.repository.getByAuthorId(authorId)
   }
 
-  async setPostImage (): Promise<{presignedUrl: string, filename: string}> {
+  async setPostImage (): Promise<{ presignedUrl: string, filename: string }> {
     const presignedData = await generateS3UploadUrl()
     return presignedData
   }

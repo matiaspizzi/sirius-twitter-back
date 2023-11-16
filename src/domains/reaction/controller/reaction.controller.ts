@@ -7,11 +7,12 @@ import { db, ReactionTypeValidation } from '@utils'
 
 import { ReactionRepositoryImpl } from '../repository'
 import { ReactionService, ReactionServiceImpl } from '../service'
+import { PostRepositoryImpl } from '@domains/post/repository'
 
 export const reactionRouter = Router()
 
 // Use dependency injection
-const service: ReactionService = new ReactionServiceImpl(new ReactionRepositoryImpl(db))
+const service: ReactionService = new ReactionServiceImpl(new ReactionRepositoryImpl(db), new PostRepositoryImpl(db))
 
 /**
  * @swagger
@@ -78,7 +79,7 @@ reactionRouter.delete('/:postId', ReactionTypeValidation, async (req: Request, r
   const type: any = req.query.type
 
   await service.deleteReaction(userId, postId, type)
-  return res.status(HttpStatus.OK).send({ message: `Deleted reaction ${type} in post ${postId}` })
+  return res.status(HttpStatus.OK).send({ message: `Deleted reaction ${type as string} in post ${postId}` })
 })
 
 /**
