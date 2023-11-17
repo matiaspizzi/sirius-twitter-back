@@ -5,4 +5,6 @@ export interface FollowerService {
   deleteFollow: (followerId: string, followedId: string) => Promise<void>
   getFollowByIds: (followerId: string, followedId: string) => Promise<FollowerDTO>
   doesFollowExist: (followerId: string, followedId: string) => Promise<boolean>
+  getFollowers: (userId: string) => Promise<FollowerDTO[]>
+  getFollows: (userId: string) => Promise<FollowerDTO[]>
 }
