@@ -47,16 +47,53 @@ export class UserRepositoryImpl implements UserRepository {
     return users.map(user => new ExtendedUserDTO(user))
   }
 
-  async getRecommendedUsersPaginated (options: OffsetPagination): Promise<UserViewDTO[]> {
+  async getRecommendedUsersPaginated (userId: string, options: OffsetPagination): Promise<UserViewDTO[]> {
+    // Obtén la lista de usuarios que el usuario actual sigue
+    const following = await this.db.user.findMany({
+      where: {
+        followers: {
+          some: {
+            id: userId
+          }
+        }
+      }
+    })
+
+    // Para cada usuario en esa lista, obtén la lista de usuarios que ellos siguen
+    let recommendedUserIds: string[] = []
+    for (const user of following) {
+      const theirFollowing = await this.db.user.findMany({
+        where: {
+          followers: {
+            some: {
+              id: user.id
+            }
+          }
+        }
+      })
+
+      recommendedUserIds = [...recommendedUserIds, ...theirFollowing.map(user => user.id)]
+    }
+
+    // Elimina duplicados y el usuario actual de la lista de usuarios recomendados
+    recommendedUserIds = [...new Set(recommendedUserIds)]
+    recommendedUserIds = recommendedUserIds.filter(id => id !== userId)
+
+    // Pagina los resultados
     const users = await this.db.user.findMany({
+      where: {
+        id: {
+          in: recommendedUserIds
+        },
+        isPrivate: false
+      },
       take: options.limit ? options.limit : undefined,
       skip: options.skip ? options.skip : undefined,
-      orderBy: [
-        {
-          id: 'asc'
-        }
-      ]
+      orderBy: {
+        id: 'asc'
+      }
     })
+
     return users.map(user => new UserViewDTO(user))
   }
 

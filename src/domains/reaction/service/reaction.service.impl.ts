@@ -21,7 +21,7 @@ export class ReactionServiceImpl implements ReactionService {
   }
 
   async createReaction (userId: string, postId: string, type: ReactionType): Promise<ReactionDTO> {
-    if (await this.doesReactionExist(userId, postId, type)) { throw new ValidationException([{ message: 'Reaction already exists' }]) }
+    if (await this.doesReactionExists(userId, postId, type)) { throw new ValidationException([{ message: 'Reaction already exists' }]) }
     if (type === ReactionType.LIKE) await this.postRepository.addQtyLikes(postId)
     if (type === ReactionType.RETWEET) await this.postRepository.addQtyRetweets(postId)
     return await this.repository.create(userId, postId, type)
@@ -35,7 +35,7 @@ export class ReactionServiceImpl implements ReactionService {
     await this.repository.delete(reaction.id)
   }
 
-  async doesReactionExist (userId: string, postId: string, type: ReactionType): Promise<boolean> {
+  async doesReactionExists (userId: string, postId: string, type: ReactionType): Promise<boolean> {
     const reaction = await this.repository.getByIdsAndType(userId, postId, type)
     return reaction != null
   }

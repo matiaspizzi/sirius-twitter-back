@@ -6,5 +6,11 @@ export interface PostService {
   getPost: (userId: string, postId: string) => Promise<PostDTO>
   getLatestPosts: (userId: string, options: { limit?: number, before?: string, after?: string }) => Promise<ExtendedPostDTO[]>
   getPostsByAuthor: (userId: any, authorId: string) => Promise<ExtendedPostDTO[]>
-  setPostImage: () => Promise<{presignedUrl: string, filename: string}>
+  setPostImage: () => Promise<{ presignedUrl: string, filename: string }>
+  addQtyLikes: (postId: string) => Promise<void>
+  subtractQtyLikes: (postId: string) => Promise<void>
+  addQtyComments: (postId: string) => Promise<void>
+  subtractQtyComments: (postId: string) => Promise<void>
+  addQtyRetweets: (postId: string) => Promise<void>
+  subtractQtyRetweets: (postId: string) => Promise<void>
 }

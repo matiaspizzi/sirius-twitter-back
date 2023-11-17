@@ -29,7 +29,7 @@ export class UserServiceImpl implements UserService {
 
   async getUserRecommendations (userId: string, options: OffsetPagination): Promise<UserViewDTO[]> {
     // TODO: make this return only users followed by users the original user follows
-    return await this.repository.getRecommendedUsersPaginated(options)
+    return await this.repository.getRecommendedUsersPaginated(userId, options)
   }
 
   async deleteUser (userId: string): Promise<void> {
@@ -40,11 +40,12 @@ export class UserServiceImpl implements UserService {
     if (isPrivate !== 'true' && isPrivate !== 'false') throw new Error('The parameter must be true or false')
     let set: boolean
     isPrivate === 'true' ? set = true : set = false
-    await this.repository.setPrivate(userId, set)
-    return set
+    return await this.repository.setPrivate(userId, set)
   }
 
   async setProfilePicture (userId: string): Promise<{ presignedUrl: string, profilePictureUrl: string }> {
+    const user = await this.repository.getById(userId)
+    if (!user) throw new NotFoundException('user')
     const data = await generateS3UploadUrl()
     const url = `https://${Constants.BUCKET_NAME}.s3.amazonaws.com/${data.filename}.jpeg`
     await this.repository.setProfilePicture(userId, url)
