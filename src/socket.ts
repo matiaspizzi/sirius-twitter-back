@@ -4,12 +4,13 @@ import { MessageRepositoryImpl } from '@domains/message/repository'
 import { MessageServiceImpl } from '@domains/message/service'
 import jwt from 'jsonwebtoken'
 import { io } from './server'
+import { FollowerRepositoryImpl } from '@domains/follower/repository'
 
 interface Socket extends IOSocket {
   userId?: string
 }
 
-const messageService = new MessageServiceImpl(new MessageRepositoryImpl(db))
+const messageService = new MessageServiceImpl(new MessageRepositoryImpl(db), new FollowerRepositoryImpl(db))
 
 io.use((socket: Socket, next) => {
   const token = socket.handshake.query.token
@@ -21,7 +22,8 @@ io.use((socket: Socket, next) => {
   }
 
   jwt.verify(token, Constants.TOKEN_SECRET, (err, context) => {
-    if (err || context === undefined || typeof context === 'string') {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    if ((err || context === undefined) || typeof context === 'string') {
       next(new Error('INVALID_TOKEN'))
       socket.disconnect()
     } else {
@@ -47,7 +49,7 @@ io.on('connection', (socket: Socket) => {
     const parsedData = JSON.parse(data)
     console.log(parsedData.receiverId)
     const message = await messageService.sendMessage(socket.userId, parsedData.receiverId, parsedData.content)
-    io.emit("newMessage", message)
+    io.emit('newMessage', message)
   })
 })
 

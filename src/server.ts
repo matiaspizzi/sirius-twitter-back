@@ -14,7 +14,8 @@ export const app = express()
 export const server = createServer(app)
 export const io = new Server(server)
 
-import './socket';
+// eslint-disable-next-line import/first
+import './socket'
 
 // Set up request logger
 if (Constants.NODE_ENV === NodeEnv.DEV) {
@@ -36,7 +37,6 @@ app.use(
 
 app.use('/api', router)
 
-
 app.use(
   '/docs',
   swaggerUi.serve,
@@ -46,4 +46,3 @@ app.use(
 server.listen(Constants.PORT, () => {
   Logger.info(`Server listening on port ${Constants.PORT}`)
 })
-
