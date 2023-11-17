@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.17% </span>
+                <span class="strong">10.86% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>24/46</span>
+                <span class='fraction'>5/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.17% </span>
+                <span class="strong">10.86% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>24/46</span>
+                <span class='fraction'>5/46</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -112,19 +112,9 @@
 <a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -133,44 +123,54 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator'
 import { ExtendedUserDTO } from '@domains/user/dto'
 &nbsp;
-export class CreatePostInputDTO {
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(240)
-<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >    content!: string</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >export class CreatePostInputDTO {</span></span>
+<span class="cstat-no" title="statement not covered" >  @IsString()</span>
+<span class="cstat-no" title="statement not covered" >  @IsNotEmpty()</span>
+<span class="cstat-no" title="statement not covered" >  @MaxLength(240)</span>
+<span class="cstat-no" title="statement not covered" >    content!: string</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  @IsOptional()</span>
 <span class="cstat-no" title="statement not covered" >  @MaxLength(4)</span>
-    images?: string[]
-}
+<span class="cstat-no" title="statement not covered" >    images?: string[]</span>
+<span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
-export class PostDTO {
-<span class="fstat-no" title="function not covered" >  constructor (post: PostDTO) {</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >export class PostDTO {</span></span>
+<span class="cstat-no" title="statement not covered" >  constructor (post: PostDTO) {</span>
 <span class="cstat-no" title="statement not covered" >    this.id = post.id</span>
 <span class="cstat-no" title="statement not covered" >    this.authorId = post.authorId</span>
 <span class="cstat-no" title="statement not covered" >    this.content = post.content</span>
@@ -178,29 +178,29 @@ export class PostDTO {
 <span class="cstat-no" title="statement not covered" >    this.createdAt = post.createdAt</span>
 <span class="cstat-no" title="statement not covered" >    this.parentId = post.parentId</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
-&nbsp;
-<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >  id: string</span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  id: string</span>
 <span class="cstat-no" title="statement not covered" >  authorId: string</span>
 <span class="cstat-no" title="statement not covered" >  content: string</span>
 <span class="cstat-no" title="statement not covered" >  images: string[]</span>
 <span class="cstat-no" title="statement not covered" >  createdAt: Date</span>
-  parentId: string | null
-}
+<span class="cstat-no" title="statement not covered" >  parentId: string | null</span>
+<span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
-export class ExtendedPostDTO extends PostDTO {
-<span class="fstat-no" title="function not covered" >  constructor (post: ExtendedPostDTO) {</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >export class ExtendedPostDTO extends PostDTO {</span></span>
+<span class="cstat-no" title="statement not covered" >  constructor (post: ExtendedPostDTO) {</span>
 <span class="cstat-no" title="statement not covered" >    super(post)</span>
 <span class="cstat-no" title="statement not covered" >    this.author = post.author</span>
 <span class="cstat-no" title="statement not covered" >    this.qtyComments = post.qtyComments</span>
 <span class="cstat-no" title="statement not covered" >    this.qtyLikes = post.qtyLikes</span>
 <span class="cstat-no" title="statement not covered" >    this.qtyRetweets = post.qtyRetweets</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
-&nbsp;
-<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >  author!: ExtendedUserDTO</span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  author!: ExtendedUserDTO</span>
 <span class="cstat-no" title="statement not covered" >  qtyComments!: number</span>
 <span class="cstat-no" title="statement not covered" >  qtyLikes!: number</span>
-  qtyRetweets!: number
-}
+<span class="cstat-no" title="statement not covered" >  qtyRetweets!: number</span>
+<span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -208,7 +208,7 @@ export class ExtendedPostDTO extends PostDTO {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-14T15:36:50.741Z
+                at 2023-11-17T22:39:17.986Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
