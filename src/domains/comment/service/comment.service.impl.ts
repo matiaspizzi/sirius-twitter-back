@@ -8,6 +8,7 @@ import { ForbiddenException, NotFoundException } from '@utils'
 import { CursorPagination } from '@types'
 import { PostRepository } from '@domains/post/repository'
 import { UserRepository } from '@domains/user/repository'
+
 export class CommentServiceImpl implements CommentService {
   constructor (private readonly repository: CommentRepository, private readonly followerRepository: FollowerRepository, private readonly userRepository: UserRepository, private readonly postRepository: PostRepository) {}
 
@@ -37,19 +38,20 @@ export class CommentServiceImpl implements CommentService {
   }
 
   async getCommentsByAuthor (userId: any, authorId: string): Promise<PostDTO[]> {
-    const doesFollowExist = await this.followerRepository.getByIds(userId, authorId)
     const author = await this.userRepository.getById(authorId)
-    if (!doesFollowExist && ((author?.isPrivate) === true)) throw new NotFoundException('comment')
+    if (!author) throw new NotFoundException('user')
+    const doesFollowExist = await this.followerRepository.getByIds(userId, authorId)
+    if (!doesFollowExist && author.isPrivate) throw new NotFoundException('comment')
     return await this.repository.getByAuthorId(authorId)
   }
 
   async getCommentsByPost (userId: string, postId: string, options: CursorPagination): Promise<ExtendedPostDTO[]> {
-    const doesFollowExist = await this.followerRepository.getByIds(userId, postId)
     const post = await this.postRepository.getById(postId)
-    if (post) {
-      const author = await this.userRepository.getById(post.authorId)
-      if (!doesFollowExist && ((author?.isPrivate) === true)) throw new NotFoundException('comment')
-    }
+    if (!post) throw new NotFoundException('comment')
+    const author = await this.userRepository.getById(post.authorId)
+    if (!author) throw new NotFoundException('user')
+    const doesFollowExist = await this.followerRepository.getByIds(userId, author.id)
+    if (!doesFollowExist && author.isPrivate) throw new NotFoundException('comment')
     return await this.repository.getAllByPostId(postId, options)
   }
 }

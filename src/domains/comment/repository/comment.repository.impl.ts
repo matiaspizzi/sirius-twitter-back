@@ -23,10 +23,10 @@ export class CommentRepositoryImpl implements CommentRepository {
       where: {
         isComment: true,
         parentId: postId
-      },     
+      },
       include: {
         author: true
-      }, 
+      },
       cursor: options.after ? { id: options.after } : (options.before) ? { id: options.before } : undefined,
       skip: options.after ?? options.before ? 1 : undefined,
       take: options.limit ? (options.before ? -options.limit : options.limit) : undefined,
