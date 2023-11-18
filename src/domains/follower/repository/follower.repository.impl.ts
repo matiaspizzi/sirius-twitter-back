@@ -31,7 +31,7 @@ export class FollowerRepositoryImpl implements FollowerRepository {
         followedId
       }
     })
-    return (follow != null) ? new FollowerDTO(follow) : null
+    return follow != null ? new FollowerDTO(follow) : null
   }
 
   async getFollowers (userId: string): Promise<FollowerDTO[]> {
@@ -40,7 +40,7 @@ export class FollowerRepositoryImpl implements FollowerRepository {
         followedId: userId
       }
     })
-    return followers.map(follower => new FollowerDTO(follower))
+    return followers.map((follower) => new FollowerDTO(follower))
   }
 
   async getFollows (userId: string): Promise<FollowerDTO[]> {
@@ -49,6 +49,6 @@ export class FollowerRepositoryImpl implements FollowerRepository {
         followerId: userId
       }
     })
-    return follows.map(follow => new FollowerDTO(follow))
+    return follows.map((follow) => new FollowerDTO(follow))
   }
 }

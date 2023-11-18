@@ -18,15 +18,58 @@ describe('CommentService', () => {
   const userRepositoryMock: UserRepository = new UserRepositoryImpl(db)
   const postRepositoryMock: PostRepository = new PostRepositoryImpl(db)
 
-  const commentService: CommentService = new CommentServiceImpl(commentRepositoryMock, followerRepositoryMock, userRepositoryMock, postRepositoryMock)
-  const comment: PostDTO = { id: '1', authorId: '1', parentId: '1', content: 'content', createdAt: new Date(), images: [] }
-  const extendedComment: ExtendedPostDTO = { id: '1', authorId: '1', parentId: '1', content: 'content', createdAt: new Date(), images: [], author: { id: '1', username: 'username', name: 'name', email: 'email', password: 'password', isPrivate: false, profilePicture: 'profilePictureUrl', createdAt: new Date() }, qtyComments: 0, qtyLikes: 0, qtyRetweets: 0 }
+  const commentService: CommentService = new CommentServiceImpl(
+    commentRepositoryMock,
+    followerRepositoryMock,
+    userRepositoryMock,
+    postRepositoryMock
+  )
+  const comment: PostDTO = {
+    id: '1',
+    authorId: '1',
+    parentId: '1',
+    content: 'content',
+    createdAt: new Date(),
+    images: []
+  }
+  const extendedComment: ExtendedPostDTO = {
+    id: '1',
+    authorId: '1',
+    parentId: '1',
+    content: 'content',
+    createdAt: new Date(),
+    images: [],
+    author: {
+      id: '1',
+      username: 'username',
+      name: 'name',
+      email: 'email',
+      password: 'password',
+      isPrivate: false,
+      profilePicture: 'profilePictureUrl',
+      createdAt: new Date()
+    },
+    qtyComments: 0,
+    qtyLikes: 0,
+    qtyRetweets: 0
+  }
   const commentInput: CreateCommentInputDTO = { parentId: '1', content: 'content' }
-  const extendedUser: ExtendedUserDTO = { id: '1', username: 'username', name: 'name', email: 'email', password: 'password', isPrivate: true, profilePicture: 'profilePictureUrl', createdAt: new Date() }
+  const extendedUser: ExtendedUserDTO = {
+    id: '1',
+    username: 'username',
+    name: 'name',
+    email: 'email',
+    password: 'password',
+    isPrivate: true,
+    profilePicture: 'profilePictureUrl',
+    createdAt: new Date()
+  }
   const follower: FollowerDTO = { id: '1', followerId: '1', followedId: '1', createdAt: new Date() }
 
   test('createComment() should return a CommentDTO object', async () => {
-    jest.spyOn(postRepositoryMock, 'addQtyComments').mockImplementation(async () => { await Promise.resolve() })
+    jest.spyOn(postRepositoryMock, 'addQtyComments').mockImplementation(async () => {
+      await Promise.resolve()
+    })
     jest.spyOn(commentRepositoryMock, 'create').mockImplementation(async () => await Promise.resolve(comment))
     const commentCreated: PostDTO = await commentService.createComment(comment.authorId, commentInput)
 
@@ -48,8 +91,12 @@ describe('CommentService', () => {
 
   test('deleteComment() should work', async () => {
     jest.spyOn(commentRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(comment))
-    jest.spyOn(commentRepositoryMock, 'delete').mockImplementation(async () => { await Promise.resolve() })
-    jest.spyOn(postRepositoryMock, 'subtractQtyComments').mockImplementation(async () => { await Promise.resolve() })
+    jest.spyOn(commentRepositoryMock, 'delete').mockImplementation(async () => {
+      await Promise.resolve()
+    })
+    jest.spyOn(postRepositoryMock, 'subtractQtyComments').mockImplementation(async () => {
+      await Promise.resolve()
+    })
     await commentService.deleteComment(comment.authorId, comment.id)
 
     expect(commentRepositoryMock.delete).toBeCalledWith(comment.id)
@@ -125,8 +172,12 @@ describe('CommentService', () => {
     jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(comment))
     jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(extendedUser))
     jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(follower))
-    jest.spyOn(commentRepositoryMock, 'getAllByPostId').mockImplementation(async () => await Promise.resolve([extendedComment]))
-    const commentsFound: ExtendedPostDTO[] = await commentService.getCommentsByPost(comment.authorId, comment.id, { limit: 10 })
+    jest
+      .spyOn(commentRepositoryMock, 'getAllByPostId')
+      .mockImplementation(async () => await Promise.resolve([extendedComment]))
+    const commentsFound: ExtendedPostDTO[] = await commentService.getCommentsByPost(comment.authorId, comment.id, {
+      limit: 10
+    })
 
     expect(commentsFound[0].id).toBeDefined()
     expect(commentsFound[0].authorId).toEqual(comment.authorId)
@@ -148,7 +199,9 @@ describe('CommentService', () => {
     jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(comment))
     jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(extendedUser))
     jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(null))
-    jest.spyOn(commentRepositoryMock, 'getAllByPostId').mockImplementation(async () => await Promise.resolve([extendedComment]))
+    jest
+      .spyOn(commentRepositoryMock, 'getAllByPostId')
+      .mockImplementation(async () => await Promise.resolve([extendedComment]))
     try {
       await commentService.getCommentsByPost(comment.authorId, comment.id, { limit: 10 })
     } catch (error: any) {

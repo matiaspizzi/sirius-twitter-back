@@ -22,7 +22,7 @@ const generateS3UploadUrl = async (): Promise<{ presignedUrl: string, filename: 
   })
 
   const presignedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 })
-  return ({ presignedUrl, filename })
+  return { presignedUrl, filename }
 }
 
 export { generateS3UploadUrl }

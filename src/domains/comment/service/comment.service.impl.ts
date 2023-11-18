@@ -10,7 +10,12 @@ import { PostRepository } from '@domains/post/repository'
 import { UserRepository } from '@domains/user/repository'
 
 export class CommentServiceImpl implements CommentService {
-  constructor (private readonly repository: CommentRepository, private readonly followerRepository: FollowerRepository, private readonly userRepository: UserRepository, private readonly postRepository: PostRepository) {}
+  constructor (
+    private readonly repository: CommentRepository,
+    private readonly followerRepository: FollowerRepository,
+    private readonly userRepository: UserRepository,
+    private readonly postRepository: PostRepository
+  ) {}
 
   async createComment (userId: string, data: CreateCommentInputDTO): Promise<PostDTO> {
     await validate(data)
@@ -30,7 +35,7 @@ export class CommentServiceImpl implements CommentService {
     const comment = await this.repository.getById(commentId)
     if (!comment) throw new NotFoundException('comment')
     const author = await this.userRepository.getById(comment.authorId)
-    if ((author?.isPrivate) === true) {
+    if (author?.isPrivate === true) {
       const doesFollow = await this.followerRepository.getByIds(userId, author.id)
       if (!doesFollow) throw new NotFoundException('comment')
     }

@@ -17,8 +17,14 @@ describe('ReactionService', () => {
   test('createReaction() should return a ReactionDTO object', async () => {
     jest.spyOn(reactionRepositoryMock, 'getByIdsAndType').mockImplementation(async () => await Promise.resolve(null))
     jest.spyOn(reactionRepositoryMock, 'create').mockImplementation(async () => await Promise.resolve(reaction))
-    jest.spyOn(postRepositoryMock, 'addQtyLikes').mockImplementation(async () => { await Promise.resolve() })
-    const reactionCreated: ReactionDTO = await reactionService.createReaction(reaction.userId, reaction.postId, reaction.type as ReactionType)
+    jest.spyOn(postRepositoryMock, 'addQtyLikes').mockImplementation(async () => {
+      await Promise.resolve()
+    })
+    const reactionCreated: ReactionDTO = await reactionService.createReaction(
+      reaction.userId,
+      reaction.postId,
+      reaction.type as ReactionType
+    )
 
     expect(reactionCreated.id).toBeDefined()
     expect(reactionCreated.userId).toEqual(reaction.userId)
@@ -27,7 +33,9 @@ describe('ReactionService', () => {
   })
 
   test('createReaction() should throw a ValidationException when reaction already exists', async () => {
-    jest.spyOn(reactionRepositoryMock, 'getByIdsAndType').mockImplementation(async () => await Promise.resolve(reaction))
+    jest
+      .spyOn(reactionRepositoryMock, 'getByIdsAndType')
+      .mockImplementation(async () => await Promise.resolve(reaction))
     try {
       await reactionService.createReaction(reaction.userId, reaction.postId, reaction.type as ReactionType)
     } catch (error: any) {
@@ -36,9 +44,15 @@ describe('ReactionService', () => {
   })
 
   test('deleteReaction() should work', async () => {
-    jest.spyOn(reactionRepositoryMock, 'getByIdsAndType').mockImplementation(async () => await Promise.resolve(reaction))
-    jest.spyOn(reactionRepositoryMock, 'delete').mockImplementation(async () => { await Promise.resolve() })
-    jest.spyOn(postRepositoryMock, 'subtractQtyLikes').mockImplementation(async () => { await Promise.resolve() })
+    jest
+      .spyOn(reactionRepositoryMock, 'getByIdsAndType')
+      .mockImplementation(async () => await Promise.resolve(reaction))
+    jest.spyOn(reactionRepositoryMock, 'delete').mockImplementation(async () => {
+      await Promise.resolve()
+    })
+    jest.spyOn(postRepositoryMock, 'subtractQtyLikes').mockImplementation(async () => {
+      await Promise.resolve()
+    })
     await reactionService.deleteReaction(reaction.userId, reaction.postId, reaction.type as ReactionType)
     expect(reactionRepositoryMock.delete).toBeCalledWith(reaction.id)
   })
@@ -63,8 +77,13 @@ describe('ReactionService', () => {
   })
 
   test('getReactionsByUserAndType() should return a ReactionDTO object', async () => {
-    jest.spyOn(reactionRepositoryMock, 'getByUserAndType').mockImplementation(async () => await Promise.resolve([reaction]))
-    const reactionsFound: ReactionDTO[] = await reactionService.getReactionsByUserAndType(reaction.userId, reaction.type as ReactionType)
+    jest
+      .spyOn(reactionRepositoryMock, 'getByUserAndType')
+      .mockImplementation(async () => await Promise.resolve([reaction]))
+    const reactionsFound: ReactionDTO[] = await reactionService.getReactionsByUserAndType(
+      reaction.userId,
+      reaction.type as ReactionType
+    )
 
     expect(reactionsFound[0].id).toBeDefined()
     expect(reactionsFound[0].userId).toEqual(reaction.userId)
@@ -82,15 +101,25 @@ describe('ReactionService', () => {
   })
 
   test('doesReactionExist() should return true', async () => {
-    jest.spyOn(reactionRepositoryMock, 'getByIdsAndType').mockImplementation(async () => await Promise.resolve(reaction))
-    const reactionExists: boolean = await reactionService.doesReactionExists(reaction.userId, reaction.postId, reaction.type as ReactionType)
+    jest
+      .spyOn(reactionRepositoryMock, 'getByIdsAndType')
+      .mockImplementation(async () => await Promise.resolve(reaction))
+    const reactionExists: boolean = await reactionService.doesReactionExists(
+      reaction.userId,
+      reaction.postId,
+      reaction.type as ReactionType
+    )
 
     expect(reactionExists).toEqual(true)
   })
 
   test('doesReactionExist() should return false', async () => {
     jest.spyOn(reactionRepositoryMock, 'getByIdsAndType').mockImplementation(async () => await Promise.resolve(null))
-    const reactionExists: boolean = await reactionService.doesReactionExists(reaction.userId, reaction.postId, reaction.type as ReactionType)
+    const reactionExists: boolean = await reactionService.doesReactionExists(
+      reaction.userId,
+      reaction.postId,
+      reaction.type as ReactionType
+    )
 
     expect(reactionExists).toEqual(false)
   })

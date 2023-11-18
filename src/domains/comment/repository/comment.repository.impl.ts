@@ -27,7 +27,7 @@ export class CommentRepositoryImpl implements CommentRepository {
       include: {
         author: true
       },
-      cursor: options.after ? { id: options.after } : (options.before) ? { id: options.before } : undefined,
+      cursor: options.after ? { id: options.after } : options.before ? { id: options.before } : undefined,
       skip: options.after ?? options.before ? 1 : undefined,
       take: options.limit ? (options.before ? -options.limit : options.limit) : undefined,
       orderBy: [
@@ -39,7 +39,7 @@ export class CommentRepositoryImpl implements CommentRepository {
         }
       ]
     })
-    return comments.map(comment => new ExtendedPostDTO(comment))
+    return comments.map((comment) => new ExtendedPostDTO(comment))
   }
 
   async delete (commentId: string): Promise<void> {
@@ -56,7 +56,7 @@ export class CommentRepositoryImpl implements CommentRepository {
         id: commentId
       }
     })
-    return (post != null) ? new PostDTO(post) : null
+    return post != null ? new PostDTO(post) : null
   }
 
   async getByAuthorId (authorId: string): Promise<PostDTO[]> {
@@ -66,6 +66,6 @@ export class CommentRepositoryImpl implements CommentRepository {
         authorId
       }
     })
-    return posts.map(post => new PostDTO(post))
+    return posts.map((post) => new PostDTO(post))
   }
 }

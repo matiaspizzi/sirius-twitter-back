@@ -6,13 +6,15 @@ export class ReactionRepositoryImpl implements ReactionRepository {
   constructor (private readonly db: PrismaClient) {}
 
   async create (userId: string, postId: string, type: ReactionType): Promise<ReactionDTO> {
-    const reaction = await this.db.reaction.create({
-      data: {
-        userId,
-        postId,
-        type
-      }
-    }).then(reaction => new ReactionDTO(reaction))
+    const reaction = await this.db.reaction
+      .create({
+        data: {
+          userId,
+          postId,
+          type
+        }
+      })
+      .then((reaction) => new ReactionDTO(reaction))
     return reaction
   }
 
@@ -51,7 +53,7 @@ export class ReactionRepositoryImpl implements ReactionRepository {
         type
       }
     })
-    return reaction.length ? reaction.map(r => new ReactionDTO(r)) : null
+    return reaction.length ? reaction.map((r) => new ReactionDTO(r)) : null
   }
 
   async getByPostId (postId: string): Promise<ReactionDTO[] | null> {
@@ -60,6 +62,6 @@ export class ReactionRepositoryImpl implements ReactionRepository {
         postId
       }
     })
-    return reaction.length ? reaction.map(r => new ReactionDTO(r)) : null
+    return reaction.length ? reaction.map((r) => new ReactionDTO(r)) : null
   }
 }

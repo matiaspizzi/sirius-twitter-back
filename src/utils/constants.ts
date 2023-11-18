@@ -2,7 +2,7 @@
 export enum NodeEnv {
   TEST = 'test',
   DEV = 'development',
-  PROD = 'production',
+  PROD = 'production'
 }
 
 // Logging levels
@@ -10,7 +10,7 @@ export enum LogLevel {
   INFO = 'info',
   DEBUG = 'debug',
   WARN = 'warn',
-  ERROR = 'error',
+  ERROR = 'error'
 }
 
 // Environment variables, casting to correct type and setting default values for them.

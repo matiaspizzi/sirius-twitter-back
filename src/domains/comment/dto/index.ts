@@ -9,7 +9,7 @@ export class CreateCommentInputDTO {
   @IsOptional()
   @MaxLength(4)
     images?: string[]
-    
+
   @IsNotEmpty()
   @IsString()
     parentId!: string

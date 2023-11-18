@@ -7,9 +7,11 @@ export class UserRepositoryImpl implements UserRepository {
   constructor (private readonly db: PrismaClient) {}
 
   async create (data: SignupInputDTO): Promise<UserDTO> {
-    return await this.db.user.create({
-      data
-    }).then(user => new UserDTO(user))
+    return await this.db.user
+      .create({
+        data
+      })
+      .then((user) => new UserDTO(user))
   }
 
   async getById (userId: string): Promise<ExtendedUserDTO | null> {
@@ -44,7 +46,7 @@ export class UserRepositoryImpl implements UserRepository {
         }
       ]
     })
-    return users.map(user => new ExtendedUserDTO(user))
+    return users.map((user) => new ExtendedUserDTO(user))
   }
 
   async getRecommendedUsersPaginated (userId: string, options: OffsetPagination): Promise<UserViewDTO[]> {
@@ -72,12 +74,12 @@ export class UserRepositoryImpl implements UserRepository {
         }
       })
 
-      recommendedUserIds = [...recommendedUserIds, ...theirFollowing.map(user => user.id)]
+      recommendedUserIds = [...recommendedUserIds, ...theirFollowing.map((user) => user.id)]
     }
 
     // Elimina duplicados y el usuario actual de la lista de usuarios recomendados
     recommendedUserIds = [...new Set(recommendedUserIds)]
-    recommendedUserIds = recommendedUserIds.filter(id => id !== userId)
+    recommendedUserIds = recommendedUserIds.filter((id) => id !== userId)
 
     // Pagina los resultados
     const users = await this.db.user.findMany({
@@ -94,7 +96,7 @@ export class UserRepositoryImpl implements UserRepository {
       }
     })
 
-    return users.map(user => new UserViewDTO(user))
+    return users.map((user) => new UserViewDTO(user))
   }
 
   async getByEmailOrUsername (email?: string, username?: string): Promise<ExtendedUserDTO | null> {
@@ -123,7 +125,7 @@ export class UserRepositoryImpl implements UserRepository {
       }
     })
 
-    return (user.isPrivate)
+    return user.isPrivate
   }
 
   async setProfilePicture (userId: string, profilePicture: string): Promise<void> {

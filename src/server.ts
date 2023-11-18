@@ -17,18 +17,15 @@ export const io = new Server(server)
 // eslint-disable-next-line import/first
 import './socket'
 
-// Set up request logger
 if (Constants.NODE_ENV === NodeEnv.DEV) {
-  app.use(morgan('tiny')) // Log requests only in development environments
+  app.use(morgan('tiny'))
 }
 
-// Set up request parsers
-app.use(express.json()) // Parses application/json payloads request bodies
-app.use(express.urlencoded({ extended: false })) // Parse application/x-www-form-urlencoded request bodies
-app.use(cookieParser()) // Parse cookies
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
 app.use(ErrorHandling)
 
-// Set up CORS
 app.use(
   cors({
     origin: Constants.CORS_WHITELIST
@@ -37,11 +34,7 @@ app.use(
 
 app.use('/api', router)
 
-app.use(
-  '/docs',
-  swaggerUi.serve,
-  swaggerUi.setup(specs)
-)
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs))
 
 server.listen(Constants.PORT, () => {
   Logger.info(`Server listening on port ${Constants.PORT}`)

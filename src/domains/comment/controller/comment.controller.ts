@@ -15,7 +15,12 @@ import { PostRepositoryImpl } from '@domains/post/repository'
 export const commentRouter = Router()
 
 // Use dependency injection
-const service: CommentService = new CommentServiceImpl(new CommentRepositoryImpl(db), new FollowerRepositoryImpl(db), new UserRepositoryImpl(db), new PostRepositoryImpl(db))
+const service: CommentService = new CommentServiceImpl(
+  new CommentRepositoryImpl(db),
+  new FollowerRepositoryImpl(db),
+  new UserRepositoryImpl(db),
+  new PostRepositoryImpl(db)
+)
 
 /**
  * @swagger

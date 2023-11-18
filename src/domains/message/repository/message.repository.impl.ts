@@ -6,9 +6,11 @@ export class MessageRepositoryImpl implements MessageRepository {
   constructor (private readonly db: PrismaClient) {}
 
   async create (data: MessageInputDTO): Promise<MessageDTO> {
-    return await this.db.message.create({
-      data
-    }).then(message => new MessageDTO(message))
+    return await this.db.message
+      .create({
+        data
+      })
+      .then((message) => new MessageDTO(message))
   }
 
   async getById (messageId: string): Promise<MessageDTO | null> {
@@ -33,6 +35,6 @@ export class MessageRepositoryImpl implements MessageRepository {
         ]
       }
     })
-    return messages.map(message => new MessageDTO(message))
+    return messages.map((message) => new MessageDTO(message))
   }
 }

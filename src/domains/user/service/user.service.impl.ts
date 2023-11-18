@@ -17,7 +17,7 @@ export class UserServiceImpl implements UserService {
 
   async getUsersByUsername (username: string, options: CursorPagination): Promise<UserViewDTO[]> {
     const users = await this.repository.getByUsernamePaginated(username, options)
-    return users.map(user => new UserViewDTO(user))
+    return users.map((user) => new UserViewDTO(user))
   }
 
   async getUserView (userId: string): Promise<UserViewDTO> {
@@ -39,7 +39,7 @@ export class UserServiceImpl implements UserService {
   async setPrivate (userId: string, isPrivate: string): Promise<boolean> {
     if (isPrivate !== 'true' && isPrivate !== 'false') throw new Error('The parameter must be true or false')
     let set: boolean
-    isPrivate === 'true' ? set = true : set = false
+    isPrivate === 'true' ? (set = true) : (set = false)
     return await this.repository.setPrivate(userId, set)
   }
 

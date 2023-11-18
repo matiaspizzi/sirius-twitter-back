@@ -30,7 +30,7 @@ export class FollowerServiceImpl implements FollowerService {
 
   async doesFollowExist (followerId: string, followedId: string): Promise<boolean> {
     const follow = await this.repository.getByIds(followerId, followedId)
-    return (follow != null)
+    return follow != null
   }
 
   async getFollowers (userId: string): Promise<FollowerDTO[]> {

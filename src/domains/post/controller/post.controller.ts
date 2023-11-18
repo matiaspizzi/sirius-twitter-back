@@ -12,7 +12,11 @@ import { UserRepositoryImpl } from '@domains/user/repository'
 export const postRouter = Router()
 
 // Use dependency injection
-const service: PostService = new PostServiceImpl(new PostRepositoryImpl(db), new FollowerRepositoryImpl(db), new UserRepositoryImpl(db))
+const service: PostService = new PostServiceImpl(
+  new PostRepositoryImpl(db),
+  new FollowerRepositoryImpl(db),
+  new UserRepositoryImpl(db)
+)
 
 /**
  * @swagger

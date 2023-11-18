@@ -8,11 +8,47 @@ import { NotFoundException } from '../../../utils/errors'
 describe('UserService', () => {
   const userRepositoryMock: UserRepository = new UserRepositoryImpl(db)
 
-  const user: ExtendedUserDTO = { id: '1', username: 'username', email: 'email', password: 'password', name: 'name', isPrivate: false, createdAt: new Date(), profilePicture: null }
+  const user: ExtendedUserDTO = {
+    id: '1',
+    username: 'username',
+    email: 'email',
+    password: 'password',
+    name: 'name',
+    isPrivate: false,
+    createdAt: new Date(),
+    profilePicture: null
+  }
   const users: ExtendedUserDTO[] = [
-    { id: '1', username: 'username', email: 'email', password: 'password', name: 'name', isPrivate: false, createdAt: new Date(), profilePicture: null },
-    { id: '2', username: 'username2', email: 'email2', password: 'password2', name: 'name2', isPrivate: false, createdAt: new Date(), profilePicture: null },
-    { id: '3', username: 'username3', email: 'email3', password: 'password3', name: 'name3', isPrivate: false, createdAt: new Date(), profilePicture: null }
+    {
+      id: '1',
+      username: 'username',
+      email: 'email',
+      password: 'password',
+      name: 'name',
+      isPrivate: false,
+      createdAt: new Date(),
+      profilePicture: null
+    },
+    {
+      id: '2',
+      username: 'username2',
+      email: 'email2',
+      password: 'password2',
+      name: 'name2',
+      isPrivate: false,
+      createdAt: new Date(),
+      profilePicture: null
+    },
+    {
+      id: '3',
+      username: 'username3',
+      email: 'email3',
+      password: 'password3',
+      name: 'name3',
+      isPrivate: false,
+      createdAt: new Date(),
+      profilePicture: null
+    }
   ]
 
   const userService: UserService = new UserServiceImpl(userRepositoryMock)
@@ -41,7 +77,9 @@ describe('UserService', () => {
   })
 
   test('getUsersByUsername() should return a UserViewDTO[] object', async () => {
-    jest.spyOn(userRepositoryMock, 'getByUsernamePaginated').mockImplementation(async () => await Promise.resolve(users))
+    jest
+      .spyOn(userRepositoryMock, 'getByUsernamePaginated')
+      .mockImplementation(async () => await Promise.resolve(users))
     const usersFound: UserViewDTO[] = await userService.getUsersByUsername(user.username, { limit: 10, skip: 0 })
 
     expect(usersFound[0].id).toEqual(user.id)
@@ -82,7 +120,9 @@ describe('UserService', () => {
       { id: '2', username: 'username2', name: 'name2', profilePicture: null },
       { id: '3', username: 'username3', name: 'name3', profilePicture: null }
     ]
-    jest.spyOn(userRepositoryMock, 'getRecommendedUsersPaginated').mockImplementation(async () => await Promise.resolve(recommended))
+    jest
+      .spyOn(userRepositoryMock, 'getRecommendedUsersPaginated')
+      .mockImplementation(async () => await Promise.resolve(recommended))
     const usersFound: UserViewDTO[] = await userService.getUserRecommendations(user.id, { limit: 10, skip: 0 })
 
     expect(usersFound[0].id).toEqual(recommended[0].id)
@@ -93,14 +133,18 @@ describe('UserService', () => {
   })
 
   test('getUserRecommendations() should return an empty array when users do not exist', async () => {
-    jest.spyOn(userRepositoryMock, 'getRecommendedUsersPaginated').mockImplementation(async () => await Promise.resolve([]))
+    jest
+      .spyOn(userRepositoryMock, 'getRecommendedUsersPaginated')
+      .mockImplementation(async () => await Promise.resolve([]))
     const usersFound: UserViewDTO[] = await userService.getUserRecommendations(user.id, { limit: 10, skip: 0 })
 
     expect(usersFound).toHaveLength(0)
   })
 
   test('deleteUser() should return void', async () => {
-    jest.spyOn(userRepositoryMock, 'delete').mockImplementation(async () => { await Promise.resolve() })
+    jest.spyOn(userRepositoryMock, 'delete').mockImplementation(async () => {
+      await Promise.resolve()
+    })
     await userService.deleteUser(user.id)
   })
 
@@ -128,7 +172,9 @@ describe('UserService', () => {
 
   test('setProfilePicture() should return a presignedUrl and a profilePictureUrl', async () => {
     jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(user))
-    jest.spyOn(userRepositoryMock, 'setProfilePicture').mockImplementation(async () => { await Promise.resolve() })
+    jest.spyOn(userRepositoryMock, 'setProfilePicture').mockImplementation(async () => {
+      await Promise.resolve()
+    })
     const data = await userService.setProfilePicture(user.id)
 
     expect(data.presignedUrl).toBeDefined()
@@ -145,7 +191,9 @@ describe('UserService', () => {
   })
 
   test('getProfilePicture() should return a profilePictureUrl', async () => {
-    jest.spyOn(userRepositoryMock, 'getProfilePicture').mockImplementation(async () => await Promise.resolve(user.profilePicture))
+    jest
+      .spyOn(userRepositoryMock, 'getProfilePicture')
+      .mockImplementation(async () => await Promise.resolve(user.profilePicture))
     const profilePictureUrl: string | null = await userService.getProfilePicture(user.id)
 
     expect(profilePictureUrl).toEqual(user.profilePicture)

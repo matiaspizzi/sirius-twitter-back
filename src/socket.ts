@@ -23,7 +23,7 @@ io.use((socket: Socket, next) => {
 
   jwt.verify(token, Constants.TOKEN_SECRET, (err, context) => {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    if ((err || context === undefined) || typeof context === 'string') {
+    if (err || context === undefined || typeof context === 'string') {
       next(new Error('INVALID_TOKEN'))
       socket.disconnect()
     } else {

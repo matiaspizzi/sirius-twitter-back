@@ -18,7 +18,11 @@ describe('MessageService', () => {
   test('sendMessage() should return a MessageDTO object', async () => {
     jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(follow))
     jest.spyOn(messageRepositoryMock, 'create').mockImplementation(async () => await Promise.resolve(message))
-    const messageCreated: MessageDTO = await messageService.sendMessage(message.senderId, message.receiverId, message.content)
+    const messageCreated: MessageDTO = await messageService.sendMessage(
+      message.senderId,
+      message.receiverId,
+      message.content
+    )
 
     expect(messageCreated.id).toBeDefined()
     expect(messageCreated.senderId).toEqual(message.senderId)

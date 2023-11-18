@@ -16,7 +16,21 @@ describe('FollowerService', () => {
   test('createFollow() should return a FollowerDTO object', async () => {
     jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(null))
     jest.spyOn(followerRepositoryMock, 'create').mockImplementation(async () => await Promise.resolve(follower))
-    jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve({ id: follower.followerId, name: 'name', username: 'username', email: 'email', password: 'password', isPrivate: false, profilePicture: null, createdAt: new Date() }))
+    jest
+      .spyOn(userRepositoryMock, 'getById')
+      .mockImplementation(
+        async () =>
+          await Promise.resolve({
+            id: follower.followerId,
+            name: 'name',
+            username: 'username',
+            email: 'email',
+            password: 'password',
+            isPrivate: false,
+            profilePicture: null,
+            createdAt: new Date()
+          })
+      )
     const followerCreated: FollowerDTO = await followerService.createFollow(follower.followerId, follower.followedId)
 
     expect(followerCreated.id).toBeDefined()
@@ -54,7 +68,9 @@ describe('FollowerService', () => {
 
   test('deleteFollow() should work', async () => {
     jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(follower))
-    jest.spyOn(followerRepositoryMock, 'delete').mockImplementation(async () => { await Promise.resolve() })
+    jest.spyOn(followerRepositoryMock, 'delete').mockImplementation(async () => {
+      await Promise.resolve()
+    })
     await followerService.deleteFollow(follower.followerId, follower.followedId)
     expect(followerRepositoryMock.delete).toBeCalledWith(follower.id)
   })
@@ -102,7 +118,21 @@ describe('FollowerService', () => {
   })
 
   test('getFollowers() should return a FollowerDTO[] object', async () => {
-    jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve({ id: follower.followerId, name: 'name', username: 'username', email: 'email', password: 'password', isPrivate: false, profilePicture: null, createdAt: new Date() }))
+    jest
+      .spyOn(userRepositoryMock, 'getById')
+      .mockImplementation(
+        async () =>
+          await Promise.resolve({
+            id: follower.followerId,
+            name: 'name',
+            username: 'username',
+            email: 'email',
+            password: 'password',
+            isPrivate: false,
+            profilePicture: null,
+            createdAt: new Date()
+          })
+      )
     jest.spyOn(followerRepositoryMock, 'getFollowers').mockImplementation(async () => await Promise.resolve([follower]))
     const followersFound: FollowerDTO[] = await followerService.getFollowers(follower.followedId)
 
@@ -122,7 +152,21 @@ describe('FollowerService', () => {
   })
 
   test('getFollows() should return a FollowerDTO[] object', async () => {
-    jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve({ id: follower.followedId, name: 'name', username: 'username', email: 'email', password: 'password', isPrivate: false, profilePicture: null, createdAt: new Date() }))
+    jest
+      .spyOn(userRepositoryMock, 'getById')
+      .mockImplementation(
+        async () =>
+          await Promise.resolve({
+            id: follower.followedId,
+            name: 'name',
+            username: 'username',
+            email: 'email',
+            password: 'password',
+            isPrivate: false,
+            profilePicture: null,
+            createdAt: new Date()
+          })
+      )
     jest.spyOn(followerRepositoryMock, 'getFollows').mockImplementation(async () => await Promise.resolve([follower]))
     const followsFound: FollowerDTO[] = await followerService.getFollows(follower.followerId)
 

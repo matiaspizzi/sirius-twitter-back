@@ -4,7 +4,13 @@ import { db } from '../../../utils'
 import { AuthService, AuthServiceImpl } from '../../../domains/auth/service'
 import { SignupInputDTO, TokenDTO, LoginInputDTO } from '../../../domains/auth/dto'
 import { ExtendedUserDTO } from '../../../domains/user/dto'
-import { ConflictException, ValidationException, NotFoundException, checkPassword, UnauthorizedException } from '../../../utils/'
+import {
+  ConflictException,
+  ValidationException,
+  NotFoundException,
+  checkPassword,
+  UnauthorizedException
+} from '../../../utils/'
 
 describe('AuthService', () => {
   const userRepositoryMock: UserRepository = new UserRepositoryImpl(db)
@@ -12,7 +18,16 @@ describe('AuthService', () => {
 
   const signupInput: SignupInputDTO = { email: 'email', username: 'username', password: 'password' }
   const loginInput: LoginInputDTO = { email: 'email', password: 'password' }
-  const extendedUser: ExtendedUserDTO = { id: '1', username: 'username', name: 'name', email: 'email', password: 'password', isPrivate: false, profilePicture: 'profilePictureUrl', createdAt: new Date() }
+  const extendedUser: ExtendedUserDTO = {
+    id: '1',
+    username: 'username',
+    name: 'name',
+    email: 'email',
+    password: 'password',
+    isPrivate: false,
+    profilePicture: 'profilePictureUrl',
+    createdAt: new Date()
+  }
 
   test('signup() should return a TokenDTO object', async () => {
     jest.spyOn(userRepositoryMock, 'getByEmailOrUsername').mockImplementation(async () => await Promise.resolve(null))
@@ -24,7 +39,9 @@ describe('AuthService', () => {
   })
 
   test('signup() should throw a ConflictException when user already exists', async () => {
-    jest.spyOn(userRepositoryMock, 'getByEmailOrUsername').mockImplementation(async () => await Promise.resolve(extendedUser))
+    jest
+      .spyOn(userRepositoryMock, 'getByEmailOrUsername')
+      .mockImplementation(async () => await Promise.resolve(extendedUser))
     try {
       await authService.signup(signupInput)
     } catch (error: any) {
@@ -43,7 +60,9 @@ describe('AuthService', () => {
   })
 
   test('login() should return a TokenDTO object', async () => {
-    jest.spyOn(userRepositoryMock, 'getByEmailOrUsername').mockImplementation(async () => await Promise.resolve(extendedUser))
+    jest
+      .spyOn(userRepositoryMock, 'getByEmailOrUsername')
+      .mockImplementation(async () => await Promise.resolve(extendedUser))
     jest.spyOn(authService, 'login').mockImplementation(async () => await Promise.resolve({ token: 'token' }))
     const token: TokenDTO = await authService.login(loginInput)
 
@@ -71,7 +90,9 @@ describe('AuthService', () => {
   })
 
   test('login() should throw a ValidationException when password is incorrect', async () => {
-    jest.spyOn(userRepositoryMock, 'getByEmailOrUsername').mockImplementation(async () => await Promise.resolve(extendedUser))
+    jest
+      .spyOn(userRepositoryMock, 'getByEmailOrUsername')
+      .mockImplementation(async () => await Promise.resolve(extendedUser))
     jest.fn(checkPassword).mockImplementation(async () => await Promise.resolve(false))
 
     try {

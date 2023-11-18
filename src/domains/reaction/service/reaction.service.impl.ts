@@ -6,7 +6,7 @@ import { ReactionType } from '@prisma/client'
 import { PostRepository } from '@domains/post/repository'
 
 export class ReactionServiceImpl implements ReactionService {
-  constructor (private readonly repository: ReactionRepository, private readonly postRepository: PostRepository) {}
+  constructor (private readonly repository: ReactionRepository, private readonly postRepository: PostRepository) { }
 
   async getReactionById (reactionId: string): Promise<ReactionDTO> {
     const reaction = await this.repository.getById(reactionId)
