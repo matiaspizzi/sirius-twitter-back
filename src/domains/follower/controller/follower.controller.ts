@@ -8,11 +8,12 @@ import { db } from '@utils'
 
 import { FollowerRepositoryImpl } from '../repository'
 import { FollowerService, FollowerServiceImpl } from '../service'
+import { UserRepositoryImpl } from '@domains/user/repository'
 
 export const followerRouter = Router()
 
 // Use dependency injection
-const service: FollowerService = new FollowerServiceImpl(new FollowerRepositoryImpl(db))
+const service: FollowerService = new FollowerServiceImpl(new FollowerRepositoryImpl(db), new UserRepositoryImpl(db))
 
 /**
  * @swagger
