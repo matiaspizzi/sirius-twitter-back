@@ -1,9 +1,5 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString, IsStrongPassword } from 'class-validator'
 
-export class TokenDTO {
-  token!: string
-}
-
 export class SignupInputDTO {
   @IsString()
   @IsNotEmpty()
