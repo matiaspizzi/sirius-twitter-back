@@ -7,11 +7,11 @@ import { db } from '@utils'
 import { MessageRepositoryImpl } from '../repository'
 import { MessageService, MessageServiceImpl } from '../service'
 import { FollowerRepositoryImpl } from '@domains/follower/repository'
-
+import { UserRepositoryImpl } from '@domains/user/repository'
 export const messageRouter = Router()
 
 // Use dependency injection
-const service: MessageService = new MessageServiceImpl(new MessageRepositoryImpl(db), new FollowerRepositoryImpl(db))
+const service: MessageService = new MessageServiceImpl(new MessageRepositoryImpl(db), new FollowerRepositoryImpl(db), new UserRepositoryImpl(db))
 
 messageRouter.get('/:receiverId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
