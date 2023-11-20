@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.76% </span>
+                <span class="strong">20.68% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>32/147</span>
+                <span class='fraction'>30/145</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.76% </span>
+                <span class="strong">20.68% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>32/147</span>
+                <span class='fraction'>30/145</span>
             </div>
         
             
@@ -208,11 +208,7 @@
 <a name='L143'></a><a href='#L143'>143</a>
 <a name='L144'></a><a href='#L144'>144</a>
 <a name='L145'></a><a href='#L145'>145</a>
-<a name='L146'></a><a href='#L146'>146</a>
-<a name='L147'></a><a href='#L147'>147</a>
-<a name='L148'></a><a href='#L148'>148</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L146'></a><a href='#L146'>146</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -358,9 +354,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { PrismaClient } from '@prisma/client'
-&nbsp;
 import { CursorPagination } from '@types'
-&nbsp;
 import { PostRepository } from '.'
 import { CreatePostInputDTO, PostDTO, ExtendedPostDTO } from '../dto'
 &nbsp;
@@ -379,7 +373,7 @@ export class PostRepositoryImpl implements PostRepository {
 &nbsp;
 <span class="fstat-no" title="function not covered" >  async getAllByDatePaginated (options: CursorPagination): Promise&lt;ExtendedPostDTO[]&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    const posts = await this.db.post.findMany({</span>
-<span class="cstat-no" title="statement not covered" >      cursor: options.after ? { id: options.after } : (options.before) ? { id: options.before } : undefined,</span>
+<span class="cstat-no" title="statement not covered" >      cursor: options.after ? { id: options.after } : options.before ? { id: options.before } : undefined,</span>
 <span class="cstat-no" title="statement not covered" >      skip: options.after ?? options.before ? 1 : undefined,</span>
 <span class="cstat-no" title="statement not covered" >      take: options.limit ? (options.before ? -options.limit : options.limit) : undefined,</span>
 <span class="cstat-no" title="statement not covered" >      orderBy: [</span>
@@ -394,7 +388,7 @@ export class PostRepositoryImpl implements PostRepository {
 <span class="cstat-no" title="statement not covered" >        author: true</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
-<span class="cstat-no" title="statement not covered" >    return posts.map(post =&gt; new ExtendedPostDTO(post))</span>
+<span class="cstat-no" title="statement not covered" >    return posts.map((post) =&gt; new ExtendedPostDTO(post))</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="fstat-no" title="function not covered" >  async delete (postId: string): Promise&lt;void&gt; {</span>
@@ -411,7 +405,7 @@ export class PostRepositoryImpl implements PostRepository {
 <span class="cstat-no" title="statement not covered" >        id: postId</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
-<span class="cstat-no" title="statement not covered" >    return (post != null) ? new PostDTO(post) : null</span>
+<span class="cstat-no" title="statement not covered" >    return post != null ? new PostDTO(post) : null</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="fstat-no" title="function not covered" >  async getByAuthorId (authorId: string): Promise&lt;ExtendedPostDTO[]&gt; {</span>
@@ -423,7 +417,7 @@ export class PostRepositoryImpl implements PostRepository {
 <span class="cstat-no" title="statement not covered" >        author: true</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
-<span class="cstat-no" title="statement not covered" >    return posts.map(post =&gt; new ExtendedPostDTO(post))</span>
+<span class="cstat-no" title="statement not covered" >    return posts.map((post) =&gt; new ExtendedPostDTO(post))</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="fstat-no" title="function not covered" >  async addQtyLikes (postId: string): Promise&lt;void&gt; {</span>
@@ -511,7 +505,7 @@ export class PostRepositoryImpl implements PostRepository {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-18T07:27:45.917Z
+                at 2023-11-19T21:37:15.231Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

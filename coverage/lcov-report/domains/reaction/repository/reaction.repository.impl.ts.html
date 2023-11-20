@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">29.23% </span>
+                <span class="strong">28.35% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/65</span>
+                <span class='fraction'>19/67</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">29.23% </span>
+                <span class="strong">28.35% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/65</span>
+                <span class='fraction'>19/67</span>
             </div>
         
             
@@ -128,7 +128,9 @@
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -136,6 +138,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -201,13 +205,15 @@ export class ReactionRepositoryImpl implements ReactionRepository {
   constructor (private readonly db: PrismaClient) {}
 &nbsp;
 <span class="fstat-no" title="function not covered" >  async create (userId: string, postId: string, type: ReactionType): Promise&lt;ReactionDTO&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    const reaction = await this.db.reaction.create({</span>
-<span class="cstat-no" title="statement not covered" >      data: {</span>
-<span class="cstat-no" title="statement not covered" >        userId,</span>
-<span class="cstat-no" title="statement not covered" >        postId,</span>
-<span class="cstat-no" title="statement not covered" >        type</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
-<span class="cstat-no" title="statement not covered" >    }).then(reaction =&gt; new ReactionDTO(reaction))</span>
+<span class="cstat-no" title="statement not covered" >    const reaction = await this.db.reaction</span>
+<span class="cstat-no" title="statement not covered" >      .create({</span>
+<span class="cstat-no" title="statement not covered" >        data: {</span>
+<span class="cstat-no" title="statement not covered" >          userId,</span>
+<span class="cstat-no" title="statement not covered" >          postId,</span>
+<span class="cstat-no" title="statement not covered" >          type</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >      })</span>
+<span class="cstat-no" title="statement not covered" >      .then((reaction) =&gt; new ReactionDTO(reaction))</span>
 <span class="cstat-no" title="statement not covered" >    return reaction</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
@@ -246,7 +252,7 @@ export class ReactionRepositoryImpl implements ReactionRepository {
 <span class="cstat-no" title="statement not covered" >        type</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
-<span class="cstat-no" title="statement not covered" >    return reaction.length ? reaction.map(r =&gt; new ReactionDTO(r)) : null</span>
+<span class="cstat-no" title="statement not covered" >    return reaction.length ? reaction.map((r) =&gt; new ReactionDTO(r)) : null</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="fstat-no" title="function not covered" >  async getByPostId (postId: string): Promise&lt;ReactionDTO[] | null&gt; {</span>
@@ -255,7 +261,7 @@ export class ReactionRepositoryImpl implements ReactionRepository {
 <span class="cstat-no" title="statement not covered" >        postId</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
-<span class="cstat-no" title="statement not covered" >    return reaction.length ? reaction.map(r =&gt; new ReactionDTO(r)) : null</span>
+<span class="cstat-no" title="statement not covered" >    return reaction.length ? reaction.map((r) =&gt; new ReactionDTO(r)) : null</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -265,7 +271,7 @@ export class ReactionRepositoryImpl implements ReactionRepository {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-18T07:27:45.917Z
+                at 2023-11-19T21:37:15.231Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
