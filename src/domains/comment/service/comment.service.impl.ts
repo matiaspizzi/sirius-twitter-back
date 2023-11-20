@@ -19,6 +19,8 @@ export class CommentServiceImpl implements CommentService {
 
   async createComment (userId: string, data: CreateCommentInputDTO): Promise<PostDTO> {
     await validate(data)
+    const post = await this.postRepository.getById(data.parentId)
+    if (!post) throw new NotFoundException('post')
     await this.postRepository.addQtyComments(data.parentId)
     return await this.repository.create(userId, data)
   }
@@ -27,7 +29,7 @@ export class CommentServiceImpl implements CommentService {
     const comment = await this.repository.getById(commentId)
     if (!comment?.parentId) throw new NotFoundException('comment')
     if (comment.authorId !== userId) throw new ForbiddenException()
-    await this.postRepository.subtractQtyComments(comment.parentId)
+    await this.postRepository.subtractQtyComments(comment?.parentId)
     await this.repository.delete(commentId)
   }
 
@@ -52,7 +54,7 @@ export class CommentServiceImpl implements CommentService {
 
   async getCommentsByPost (userId: string, postId: string, options: CursorPagination): Promise<ExtendedPostDTO[]> {
     const post = await this.postRepository.getById(postId)
-    if (!post) throw new NotFoundException('comment')
+    if (!post) throw new NotFoundException('post')
     const author = await this.userRepository.getById(post.authorId)
     if (!author) throw new NotFoundException('user')
     const doesFollowExist = await this.followerRepository.getByIds(userId, author.id)

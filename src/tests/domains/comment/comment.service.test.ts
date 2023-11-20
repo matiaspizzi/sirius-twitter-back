@@ -70,6 +70,7 @@ describe('CommentService', () => {
     jest.spyOn(postRepositoryMock, 'addQtyComments').mockImplementation(async () => {
       await Promise.resolve()
     })
+    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(comment))
     jest.spyOn(commentRepositoryMock, 'create').mockImplementation(async () => await Promise.resolve(comment))
     const commentCreated: PostDTO = await commentService.createComment(comment.authorId, commentInput)
 
