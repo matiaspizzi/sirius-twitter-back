@@ -2,7 +2,7 @@ import { describe, test } from '@jest/globals'
 import { UserRepository, UserRepositoryImpl } from '../../../domains/user/repository'
 import { db } from '../../../utils'
 import { AuthService, AuthServiceImpl } from '../../../domains/auth/service'
-import { SignupInputDTO, TokenDTO, LoginInputDTO } from '../../../domains/auth/dto'
+import { SignupInputDTO, LoginInputDTO } from '../../../domains/auth/dto'
 import { ExtendedUserDTO } from '../../../domains/user/dto'
 import {
   ConflictException,
@@ -29,13 +29,13 @@ describe('AuthService', () => {
     createdAt: new Date()
   }
 
-  test('signup() should return a TokenDTO object', async () => {
+  test('signup() should return UserId and auth token', async () => {
     jest.spyOn(userRepositoryMock, 'getByEmailOrUsername').mockImplementation(async () => await Promise.resolve(null))
     jest.spyOn(userRepositoryMock, 'create').mockImplementation(async () => await Promise.resolve(extendedUser))
-    jest.spyOn(authService, 'signup').mockImplementation(async () => await Promise.resolve({ token: 'token' }))
-    const token: TokenDTO = await authService.signup(signupInput)
-
-    expect(token).toBeDefined()
+    jest.spyOn(authService, 'signup').mockImplementation(async () => await Promise.resolve({ userId: '1', token: 'token' }))
+    const data = await authService.signup(signupInput)
+    expect(data.token).toBeDefined()
+    expect(data.userId).toBeDefined()
   })
 
   test('signup() should throw a ConflictException when user already exists', async () => {
@@ -59,14 +59,14 @@ describe('AuthService', () => {
     }
   })
 
-  test('login() should return a TokenDTO object', async () => {
+  test('login() should return UserId and auth token', async () => {
     jest
       .spyOn(userRepositoryMock, 'getByEmailOrUsername')
       .mockImplementation(async () => await Promise.resolve(extendedUser))
-    jest.spyOn(authService, 'login').mockImplementation(async () => await Promise.resolve({ token: 'token' }))
-    const token: TokenDTO = await authService.login(loginInput)
-
-    expect(token).toBeDefined()
+    jest.spyOn(authService, 'login').mockImplementation(async () => await Promise.resolve({ userId: '1', token: 'token' }))
+    const data = await authService.login(loginInput)
+    expect(data.token).toBeDefined()
+    expect(data.userId).toBeDefined()
   })
 
   test('login() should throw a NotFoundException when user does not exist', async () => {
