@@ -5,12 +5,13 @@ import { MessageServiceImpl } from '@domains/message/service'
 import jwt from 'jsonwebtoken'
 import { io } from './server'
 import { FollowerRepositoryImpl } from '@domains/follower/repository'
+import { UserRepositoryImpl } from '@domains/user/repository'
 
 interface Socket extends IOSocket {
   userId?: string
 }
 
-const messageService = new MessageServiceImpl(new MessageRepositoryImpl(db), new FollowerRepositoryImpl(db))
+const messageService = new MessageServiceImpl(new MessageRepositoryImpl(db), new FollowerRepositoryImpl(db), new UserRepositoryImpl(db))
 
 io.use((socket: Socket, next) => {
   const token = socket.handshake.query.token
