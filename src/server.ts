@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import swaggerUi from 'swagger-ui-express'
 import { Constants, NodeEnv, Logger } from '@utils'
-import { router } from '@router'
+import { router } from './router'
 import { ErrorHandling } from '@utils/errors'
 import { createServer } from 'node:http'
 import { specs } from '@utils/swagger'
@@ -24,7 +24,6 @@ if (Constants.NODE_ENV === NodeEnv.DEV) {
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(ErrorHandling)
 
 app.use(
   cors({
@@ -33,6 +32,7 @@ app.use(
 )
 
 app.use('/api', router)
+app.use(ErrorHandling)
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs))
 
