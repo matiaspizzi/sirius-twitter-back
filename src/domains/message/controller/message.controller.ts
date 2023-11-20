@@ -13,6 +13,29 @@ export const messageRouter = Router()
 // Use dependency injection
 const service: MessageService = new MessageServiceImpl(new MessageRepositoryImpl(db), new FollowerRepositoryImpl(db), new UserRepositoryImpl(db))
 
+/**
+ * @swagger
+ * /api/message/:receiver_id:
+ *   post:
+ *     security:
+ *       - bearer: []
+ *     summary: Get messages
+ *     tags: [Messages]
+ *     parameters:
+ *       - in: path
+ *         name: receiver_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The receiver id to get messages
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Message'
+ */
 messageRouter.get('/:receiverId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { receiverId } = req.params
@@ -22,6 +45,29 @@ messageRouter.get('/:receiverId', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).json(messages)
 })
 
+/**
+ * @swagger
+ * /api/message/:receiver_id:
+ *   post:
+ *     security:
+ *       - bearer: []
+ *     summary: Send messages
+ *     tags: [Messages]
+ *     parameters:
+ *       - in: path
+ *         name: receiver_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The receiver id to send messages
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Message'
+ */
 messageRouter.post('/:receiverId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { receiverId } = req.params

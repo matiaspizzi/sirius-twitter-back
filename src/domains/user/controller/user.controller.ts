@@ -121,6 +121,14 @@ userRouter.delete('/', async (req: Request, res: Response) => {
  *     responses:
  *       200:
  *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 private:
+ *                   type: boolean
+ *                   description: Privacy status
  */
 userRouter.post('/private/:isPrivate', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
@@ -130,11 +138,47 @@ userRouter.post('/private/:isPrivate', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).send({ private: setted })
 })
 
+/**
+ * @swagger
+ * /api/user/profilePicture:
+ *   post:
+ *     security:
+ *       - bearer: []
+ *     summary: Get s3 presigned url to set user profile picture
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 presignedUrl:
+ *                   type: string
+ *                   description: s3 presigned url to set user profile picture
+ *                 profilePictureUrl:
+ *                   type: string
+ *                   description: User's profile picture url
+ */
 userRouter.get('/profilePicture/presignedUrl', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const data = await service.setProfilePicture(userId)
   if (data !== null) return res.status(HttpStatus.OK).send(data)
 })
+
+/**
+ * @swagger
+ * /api/user/profilePicture:
+ *   post:
+ *     security:
+ *       - bearer: []
+ *     summary: Set user profile picture
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: OK
+ */
 
 userRouter.get('/profilePicture', async (req: Request, res: Response) => {
   const { userId } = res.locals.context

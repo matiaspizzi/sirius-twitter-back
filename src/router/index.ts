@@ -251,4 +251,29 @@ router.use('/message', withAuth, messageRouter)
  *       example:
  *         content: 'Hello world!'
  *         images: ['https://example.com/image.png']
+ *     Message:
+ *       type: object
+ *       required:
+ *         - senderId
+ *         - receiverId
+ *         - content
+ *       properties:
+ *         content:
+ *           type: string
+ *           description: Message content
+ *         senderId:
+ *           type: string
+ *           description: Sender id
+ *         receiverId:
+ *           type: string
+ *           description: Receiver id
+ *         createdAt:
+ *           type: string
+ *           format: date
+ *           description: The date the message was created
+ *       example:
+ *         content: 'Hello world!'
+ *         senderId: '123'
+ *         receiverId: '321'
+ *         createdAt: '2021-01-01T00:00:00.000Z'
  */
