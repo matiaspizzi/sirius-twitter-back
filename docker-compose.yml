@@ -26,11 +26,11 @@ services:
     tty: true
     environment:
       - DATABASE_URL=${DOCKER_DATABASE_URL}
-      - PORT=3030
+      - PORT=8080
     env_file:
       - .envrc
     ports:
-      - '3030:3030'
+      - '8080:8080'
     volumes: # if there's any new files containing sources, add them as volumes
       - ./src:/app/src
       - ./prisma:/app/prisma

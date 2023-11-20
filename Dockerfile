@@ -28,7 +28,7 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/dist ./dist
 
-EXPOSE 3030
+EXPOSE 8080
 
 CMD yarn prod
 
