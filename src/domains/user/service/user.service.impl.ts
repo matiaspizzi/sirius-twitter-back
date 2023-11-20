@@ -1,4 +1,4 @@
-import { NotFoundException } from '@utils/errors'
+import { NotFoundException, ValidationException } from '@utils/errors'
 import { OffsetPagination, CursorPagination } from 'types'
 import { UserViewDTO, ExtendedUserDTO } from '../dto'
 import { UserRepository } from '../repository'
@@ -28,16 +28,17 @@ export class UserServiceImpl implements UserService {
   }
 
   async getUserRecommendations (userId: string, options: OffsetPagination): Promise<UserViewDTO[]> {
-    // TODO: make this return only users followed by users the original user follows
     return await this.repository.getRecommendedUsersPaginated(userId, options)
   }
 
   async deleteUser (userId: string): Promise<void> {
+    const user = await this.repository.getById(userId)
+    if (!user) throw new NotFoundException('user')
     await this.repository.delete(userId)
   }
 
   async setPrivate (userId: string, isPrivate: string): Promise<boolean> {
-    if (isPrivate !== 'true' && isPrivate !== 'false') throw new Error('The parameter must be true or false')
+    if (isPrivate !== 'true' && isPrivate !== 'false') throw new ValidationException([{ message: 'The parameter must be true or false' }])
     let set: boolean
     isPrivate === 'true' ? (set = true) : (set = false)
     return await this.repository.setPrivate(userId, set)

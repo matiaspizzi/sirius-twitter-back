@@ -145,6 +145,7 @@ describe('UserService', () => {
     jest.spyOn(userRepositoryMock, 'delete').mockImplementation(async () => {
       await Promise.resolve()
     })
+    jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(user))
     await userService.deleteUser(user.id)
   })
 
