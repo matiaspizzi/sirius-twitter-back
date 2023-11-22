@@ -27,17 +27,12 @@ export class PostServiceImpl implements PostService {
     await this.repository.delete(postId)
   }
 
-  async getPost (userId: string, postId: string): Promise<PostDTO> {
+  async getPost (userId: string, postId: string): Promise<ExtendedPostDTO> {
     const post = await this.repository.getById(postId)
     if (!post) throw new NotFoundException('post')
-    const author = await this.userRepository.getById(post.authorId)
-    if (author) {
-      if (author.isPrivate) {
-        const doesFollow = await this.followerRepository.getByIds(userId, author.id)
-        if (!doesFollow) throw new NotFoundException('post')
-      }
-    } else {
-      throw new NotFoundException('user')
+    if (post.author.isPrivate) {
+      const doesFollow = await this.followerRepository.getByIds(userId, post.author.id)
+      if (!doesFollow) throw new NotFoundException('post')
     }
     return post
   }

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator'
+import { IsNotEmpty, IsOptional, IsString, MaxLength, ArrayMaxSize } from 'class-validator'
 
 export class CreateCommentInputDTO {
   @IsString()
@@ -7,7 +7,7 @@ export class CreateCommentInputDTO {
     content!: string
 
   @IsOptional()
-  @MaxLength(4)
+  @ArrayMaxSize(4)
     images?: string[]
 
   @IsNotEmpty()
