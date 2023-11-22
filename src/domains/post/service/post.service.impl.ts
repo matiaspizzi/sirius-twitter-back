@@ -4,7 +4,7 @@ import { PostService } from '.'
 import { FollowerRepository } from '@domains/follower/repository'
 import { UserRepository } from '@domains/user/repository'
 import { validate } from 'class-validator'
-import { ForbiddenException, NotFoundException } from '@utils'
+import { ForbiddenException, NotFoundException, Constants } from '@utils'
 import { CursorPagination } from '@types'
 import { generateS3UploadUrl } from '@utils/s3'
 
@@ -62,9 +62,10 @@ export class PostServiceImpl implements PostService {
     return await this.repository.getByAuthorId(authorId)
   }
 
-  async setPostImage (): Promise<{ presignedUrl: string, filename: string }> {
-    const presignedData = await generateS3UploadUrl()
-    return presignedData
+  async setPostImage (): Promise<{ presignedUrl: string, fileUrl: string }> {
+    const data = await generateS3UploadUrl()
+    const url = `https://${Constants.BUCKET_NAME}.s3.amazonaws.com/${data.filename}.jpeg`
+    return { presignedUrl: data.presignedUrl, fileUrl: url }
   }
 
   async addQtyLikes (postId: string): Promise<void> {
