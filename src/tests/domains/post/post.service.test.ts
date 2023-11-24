@@ -32,6 +32,7 @@ describe('PostService', () => {
     images: [],
     parentId: null,
     author,
+    isComment: false,
     qtyComments: 0,
     qtyLikes: 0,
     qtyRetweets: 0
@@ -77,7 +78,7 @@ describe('PostService', () => {
   })
 
   test('getPost() should return a PostDTO object', async () => {
-    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(post as PostDTO))
+    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(post))
     jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(author))
     const postFound: PostDTO = await postService.getPost(post.authorId, post.id)
 
@@ -89,7 +90,7 @@ describe('PostService', () => {
   })
 
   test('getPost() should throw a NotFoundException when author is private and user does not follow them', async () => {
-    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(post as PostDTO))
+    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(post))
     jest
       .spyOn(userRepositoryMock, 'getById')
       .mockImplementation(async () => await Promise.resolve({ ...author, isPrivate: true }))
@@ -183,7 +184,7 @@ describe('PostService', () => {
   test('setPostImage() should return a presignedUrl and filename', async () => {
     const presignedData = await postService.setPostImage()
     expect(presignedData.presignedUrl).toBeDefined()
-    expect(presignedData.filename).toBeDefined()
+    expect(presignedData.fileUrl).toBeDefined()
   })
 
   test('addQtyLikes() should work', async () => {
