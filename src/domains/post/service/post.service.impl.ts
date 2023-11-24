@@ -43,7 +43,7 @@ export class PostServiceImpl implements PostService {
     const filteredPosts = []
     for (const post of posts) {
       const doesFollow = await this.followerRepository.getByIds(userId, post.author.id)
-      if (doesFollow) filteredPosts.push(post)
+      if (doesFollow != null || !post.author.isPrivate) filteredPosts.push(post)
     }
     return filteredPosts
   }

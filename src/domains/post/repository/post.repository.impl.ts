@@ -21,6 +21,10 @@ export class PostRepositoryImpl implements PostRepository {
       cursor: options.after ? { id: options.after } : options.before ? { id: options.before } : undefined,
       skip: options.after ?? options.before ? 1 : undefined,
       take: options.limit ? (options.before ? -options.limit : options.limit) : undefined,
+      where: {
+        parentId: null,
+        isComment: false
+      },
       orderBy: [
         {
           createdAt: 'desc'

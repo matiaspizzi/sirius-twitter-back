@@ -34,12 +34,14 @@ export class ExtendedPostDTO extends PostDTO {
   constructor (post: ExtendedPostDTO) {
     super(post)
     this.author = post.author
+    this.isComment = post.isComment
     this.qtyComments = post.qtyComments
     this.qtyLikes = post.qtyLikes
     this.qtyRetweets = post.qtyRetweets
   }
 
   author!: ExtendedUserDTO
+  isComment!: boolean
   qtyComments!: number
   qtyLikes!: number
   qtyRetweets!: number
