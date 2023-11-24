@@ -5,7 +5,8 @@ export interface UserService {
   deleteUser: (userId: string) => Promise<void>
   getUser: (userId: string) => Promise<ExtendedUserDTO>
   getUsersByUsername: (username: string, options: OffsetPagination) => Promise<UserViewDTO[]>
-  getUserView: (userId: string) => Promise<UserViewDTO>
+  getSelfUserView: (userId: string) => Promise<UserViewDTO>
+  getUserView: (userId: string, loggedUser: string) => Promise<{ user: UserViewDTO, followsYou: boolean }>
   getUserRecommendations: (userId: any, options: OffsetPagination) => Promise<UserViewDTO[]>
   setPrivate: (userId: string, isPrivate: string) => Promise<boolean>
   setProfilePicture: (userId: string) => Promise<{ presignedUrl: string, profilePictureUrl: string }>

@@ -5,9 +5,10 @@ import { UserRepository } from '../repository'
 import { UserService } from './user.service'
 import { generateS3UploadUrl } from '@utils/s3'
 import { Constants } from '@utils'
+import { FollowerRepository } from '@domains/follower/repository'
 
 export class UserServiceImpl implements UserService {
-  constructor (private readonly repository: UserRepository) {}
+  constructor (private readonly repository: UserRepository, private readonly followerRepository: FollowerRepository) {}
 
   async getUser (userId: string): Promise<ExtendedUserDTO> {
     const user = await this.repository.getById(userId)
@@ -20,7 +21,15 @@ export class UserServiceImpl implements UserService {
     return users.map((user) => new UserViewDTO(user))
   }
 
-  async getUserView (userId: string): Promise<UserViewDTO> {
+  async getUserView (userId: string, loggedUser: string): Promise<{ user: UserViewDTO, followsYou: boolean }> {
+    const user = await this.repository.getById(userId)
+    if (!user) throw new NotFoundException('user')
+    const doesFollow = await this.followerRepository.getByIds(userId, loggedUser)
+    const userView = new UserViewDTO(user)
+    return { user: userView, followsYou: doesFollow != null }
+  }
+
+  async getSelfUserView (userId: string): Promise<UserViewDTO> {
     const user = await this.repository.getById(userId)
     if (!user) throw new NotFoundException('user')
     const userView = new UserViewDTO(user)

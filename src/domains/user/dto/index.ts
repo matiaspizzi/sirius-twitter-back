@@ -20,6 +20,7 @@ export class ExtendedUserDTO extends UserDTO {
     this.email = user.email
     this.password = user.password
     this.name = user.name
+    this.isPrivate = user.isPrivate
   }
 
   email!: string
@@ -32,8 +33,10 @@ export class UserViewDTO {
     this.name = user.name
     this.username = user.username
     this.profilePicture = user.profilePicture
+    this.isPrivate = user.isPrivate
   }
 
+  isPrivate: boolean
   id: string
   name: string | null
   username: string

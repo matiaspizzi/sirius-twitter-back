@@ -6,11 +6,12 @@ import { db } from '@utils'
 
 import { UserRepositoryImpl } from '../repository'
 import { UserService, UserServiceImpl } from '../service'
+import { FollowerRepositoryImpl } from '@domains/follower/repository'
 
 export const userRouter = Router()
 
 // Use dependency injection
-const service: UserService = new UserServiceImpl(new UserRepositoryImpl(db))
+const service: UserService = new UserServiceImpl(new UserRepositoryImpl(db), new FollowerRepositoryImpl(db))
 
 /**
  * @swagger
@@ -69,7 +70,7 @@ userRouter.get('/', async (req: Request, res: Response) => {
 userRouter.get('/me', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
 
-  const user = await service.getUserView(userId)
+  const user = await service.getSelfUserView(userId)
 
   return res.status(HttpStatus.OK).json(user)
 })
@@ -211,8 +212,8 @@ userRouter.get('/profilePicture', async (req: Request, res: Response) => {
  */
 userRouter.get('/:userId', async (req: Request, res: Response) => {
   const { userId: otherUserId } = req.params
-
-  const user = await service.getUserView(otherUserId)
+  const { loggedUser } = res.locals.context
+  const user = await service.getUserView(otherUserId, loggedUser)
 
   return res.status(HttpStatus.OK).json(user)
 })

@@ -46,7 +46,6 @@ io.on('connection', (socket: Socket) => {
 
   socket.on('sendMessage', async (data) => {
     if (!socket.userId) return
-    console.log(data)
     const parsedData = JSON.parse(data)
     console.log(parsedData.receiverId)
     const message = await messageService.sendMessage(socket.userId, parsedData.receiverId, parsedData.content)
