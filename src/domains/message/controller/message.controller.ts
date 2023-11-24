@@ -73,7 +73,7 @@ messageRouter.post('/:receiverId', async (req: Request, res: Response) => {
   const { receiverId } = req.params
   const { content } = req.body
 
-  const message = await service.sendMessage(userId, receiverId, content)
+  const message = await service.newMessage(userId, receiverId, content)
 
   return res.status(HttpStatus.CREATED).json(message)
 })

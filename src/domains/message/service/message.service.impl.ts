@@ -12,10 +12,10 @@ export class MessageServiceImpl implements MessageService {
     private readonly userRepository: UserRepository
   ) {}
 
-  async sendMessage (userId: string, receiverId: string, content: string): Promise<MessageDTO> {
+  async newMessage (userId: string, receiverId: string, content: string): Promise<MessageDTO> {
     const doesFollow = await this.followerRepository.getByIds(userId, receiverId)
     const doesFollowBack = await this.followerRepository.getByIds(receiverId, userId)
-    if (!doesFollow || !doesFollowBack) throw new NotFoundException('user')
+    if (!doesFollow || !doesFollowBack) throw new NotFoundException('Follow')
     return await this.repository.create({ content, senderId: userId, receiverId })
   }
 

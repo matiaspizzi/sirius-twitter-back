@@ -22,7 +22,7 @@ describe('MessageService', () => {
   test('sendMessage() should return a MessageDTO object', async () => {
     jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(follow))
     jest.spyOn(messageRepositoryMock, 'create').mockImplementation(async () => await Promise.resolve(message))
-    const messageCreated: MessageDTO = await messageService.sendMessage(
+    const messageCreated: MessageDTO = await messageService.newMessage(
       message.senderId,
       message.receiverId,
       message.content
@@ -37,7 +37,7 @@ describe('MessageService', () => {
   test('sendMessage() should throw a NotFoundException when user do not follow back each other', async () => {
     jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(null))
     try {
-      await messageService.sendMessage(message.senderId, message.receiverId, message.content)
+      await messageService.newMessage(message.senderId, message.receiverId, message.content)
     } catch (error: any) {
       expect(error).toBeInstanceOf(NotFoundException)
     }
@@ -46,7 +46,7 @@ describe('MessageService', () => {
   test('sendMessage() should throw a NotFoundException when user does not exist', async () => {
     jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(null))
     try {
-      await messageService.sendMessage(message.senderId, message.receiverId, message.content)
+      await messageService.newMessage(message.senderId, message.receiverId, message.content)
     } catch (error: any) {
       expect(error).toBeInstanceOf(NotFoundException)
     }
