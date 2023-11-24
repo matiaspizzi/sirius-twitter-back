@@ -37,7 +37,7 @@ afterAll(async () => {
   server.close()
 })
 
-describe('POST /api/message/:receiverId', () => {
+describe('POST /api/message/:to', () => {
   test('should return 404 NOT FOUND when users do not follow eachother', async () => {
     const res = await api.post(`/api/message/${anotherUserId}`).set('Authorization', `Bearer ${token}`).send({
       content: 'Hello'
@@ -62,14 +62,14 @@ describe('POST /api/message/:receiverId', () => {
     expect(res.body).toEqual({
       id: expect.any(String),
       content: 'Hello',
-      senderId: userId,
-      receiverId: anotherUserId,
+      from: userId,
+      to: anotherUserId,
       createdAt: expect.any(String)
     })
   })
 })
 
-describe('GET /api/message/:receiverId', () => {
+describe('GET /api/message/:to', () => {
   test('should return 404 NOT FOUND when receiver does not exist', async () => {
     const res = await api.get('/api/message/80f29385-cab9-47d5-997c-0fb8362b8030').set('Authorization', `Bearer ${token}`)
 
@@ -87,8 +87,8 @@ describe('GET /api/message/:receiverId', () => {
     expect(res.body).toEqual([{
       id: expect.any(String),
       content: 'Hello',
-      senderId: userId,
-      receiverId: anotherUserId,
+      from: userId,
+      to: anotherUserId,
       createdAt: expect.any(String)
     }])
   })

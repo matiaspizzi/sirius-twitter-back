@@ -167,15 +167,15 @@ export class MessageRepositoryImpl implements MessageRepository {
 <span class="cstat-no" title="statement not covered" >    return message ? new MessageDTO(message) : null</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async getByUserIds (userId: string, receiverId: string): Promise&lt;MessageDTO[]&gt; {</span>
+<span class="fstat-no" title="function not covered" >  async getByUserIds (userId: string, to: string): Promise&lt;MessageDTO[]&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    const messages = await this.db.message.findMany({</span>
 <span class="cstat-no" title="statement not covered" >      where: {</span>
 <span class="cstat-no" title="statement not covered" >        AND: [</span>
 <span class="cstat-no" title="statement not covered" >          {</span>
-<span class="cstat-no" title="statement not covered" >            senderId: userId</span>
+<span class="cstat-no" title="statement not covered" >            from: userId</span>
 <span class="cstat-no" title="statement not covered" >          },</span>
 <span class="cstat-no" title="statement not covered" >          {</span>
-<span class="cstat-no" title="statement not covered" >            receiverId</span>
+<span class="cstat-no" title="statement not covered" >            to</span>
 <span class="cstat-no" title="statement not covered" >          }</span>
 <span class="cstat-no" title="statement not covered" >        ]</span>
 <span class="cstat-no" title="statement not covered" >      }</span>

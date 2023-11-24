@@ -36,11 +36,11 @@ const service: MessageService = new MessageServiceImpl(new MessageRepositoryImpl
  *             schema:
  *               $ref: '#/components/schemas/Message'
  */
-messageRouter.get('/:receiverId', async (req: Request, res: Response) => {
+messageRouter.get('/:to', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
-  const { receiverId } = req.params
+  const { to } = req.params
 
-  const messages = await service.getMessages(userId, receiverId)
+  const messages = await service.getMessages(userId, to)
 
   return res.status(HttpStatus.OK).json(messages)
 })
@@ -68,12 +68,12 @@ messageRouter.get('/:receiverId', async (req: Request, res: Response) => {
  *             schema:
  *               $ref: '#/components/schemas/Message'
  */
-messageRouter.post('/:receiverId', async (req: Request, res: Response) => {
+messageRouter.post('/:to', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
-  const { receiverId } = req.params
+  const { to } = req.params
   const { content } = req.body
 
-  const message = await service.newMessage(userId, receiverId, content)
+  const message = await service.newMessage(userId, to, content)
 
   return res.status(HttpStatus.CREATED).json(message)
 })

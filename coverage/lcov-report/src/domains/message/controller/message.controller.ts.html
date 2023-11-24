@@ -144,21 +144,21 @@ export const messageRouter = Router()
 // Use dependency injection
 const service: MessageService = new MessageServiceImpl(new MessageRepositoryImpl(db), new FollowerRepositoryImpl(db), new UserRepositoryImpl(db))
 &nbsp;
-messageRouter.get('/:receiverId', async (req: Request, res: Response) =&gt; {
+messageRouter.get('/:to', async (req: Request, res: Response) =&gt; {
   const { userId } = res.locals.context
-  const { receiverId } = req.params
+  const { to } = req.params
 &nbsp;
-  const messages = await service.getMessages(userId, receiverId)
+  const messages = await service.getMessages(userId, to)
 &nbsp;
   return res.status(HttpStatus.OK).json(messages)
 })
 &nbsp;
-messageRouter.post('/:receiverId', async (req: Request, res: Response) =&gt; {
+messageRouter.post('/:to', async (req: Request, res: Response) =&gt; {
   const { userId } = res.locals.context
-  const { receiverId } = req.params
+  const { to } = req.params
   const { content } = req.body
 &nbsp;
-  const message = await service.sendMessage(userId, receiverId, content)
+  const message = await service.sendMessage(userId, to, content)
 &nbsp;
   return res.status(HttpStatus.CREATED).json(message)
 })

@@ -78,8 +78,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { MessageDTO } from '../dto'
 &nbsp;
 export interface MessageService {
-  getMessages: (userId: string, receiverId: string) =&gt; Promise&lt;MessageDTO[]&gt;
-  sendMessage: (userId: string, receiverId: string, content: string) =&gt; Promise&lt;MessageDTO&gt;
+  getMessages: (userId: string, to: string) =&gt; Promise&lt;MessageDTO[]&gt;
+  sendMessage: (userId: string, to: string, content: string) =&gt; Promise&lt;MessageDTO&gt;
 }
 &nbsp;</pre></td></tr></table></pre>
 

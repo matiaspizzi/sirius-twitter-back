@@ -121,28 +121,28 @@
   constructor (message: MessageDTO) {
     this.id = message.id
     this.content = message.content
-    this.senderId = message.senderId
-    this.receiverId = message.receiverId
+    this.from = message.from
+    this.to = message.to
     this.createdAt = message.createdAt
   }
 &nbsp;
   id: string
   content: string
-  senderId: string
-  receiverId: string
+  from: string
+  to: string
   createdAt: Date
 }
 &nbsp;
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >export class MessageInputDTO {</span></span>
 <span class="cstat-no" title="statement not covered" >  constructor (message: MessageInputDTO) {</span>
 <span class="cstat-no" title="statement not covered" >    this.content = message.content</span>
-<span class="cstat-no" title="statement not covered" >    this.senderId = message.senderId</span>
-<span class="cstat-no" title="statement not covered" >    this.receiverId = message.receiverId</span>
+<span class="cstat-no" title="statement not covered" >    this.from = message.from</span>
+<span class="cstat-no" title="statement not covered" >    this.to = message.to</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  content: string</span>
-<span class="cstat-no" title="statement not covered" >  senderId: string</span>
-<span class="cstat-no" title="statement not covered" >  receiverId: string</span>
+<span class="cstat-no" title="statement not covered" >  from: string</span>
+<span class="cstat-no" title="statement not covered" >  to: string</span>
 <span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;</pre></td></tr></table></pre>
 

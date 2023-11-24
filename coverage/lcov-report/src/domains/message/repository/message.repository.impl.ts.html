@@ -167,15 +167,15 @@ export class MessageRepositoryImpl implements MessageRepository {
 <span class="cstat-no" title="statement not covered" >    return message ? new MessageDTO(message) : null</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
-  async getByUserIds (userId: string, receiverId: string): Promise&lt;MessageDTO[]&gt; {
+  async getByUserIds (userId: string, to: string): Promise&lt;MessageDTO[]&gt; {
     const messages = await this.db.message.findMany({
       where: {
         AND: [
           {
-            senderId: userId
+            from: userId
           },
           {
-            receiverId
+            to
           }
         ]
       }
