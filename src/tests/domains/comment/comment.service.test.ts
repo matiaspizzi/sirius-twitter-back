@@ -49,6 +49,7 @@ describe('CommentService', () => {
       profilePicture: 'profilePictureUrl',
       createdAt: new Date()
     },
+    isComment: true,
     qtyComments: 0,
     qtyLikes: 0,
     qtyRetweets: 0
@@ -70,7 +71,7 @@ describe('CommentService', () => {
     jest.spyOn(postRepositoryMock, 'addQtyComments').mockImplementation(async () => {
       await Promise.resolve()
     })
-    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(comment))
+    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(extendedComment))
     jest.spyOn(commentRepositoryMock, 'create').mockImplementation(async () => await Promise.resolve(comment))
     const commentCreated: PostDTO = await commentService.createComment(comment.authorId, commentInput)
 
@@ -158,7 +159,7 @@ describe('CommentService', () => {
   })
 
   test('getCommentsByAuthor() should throw a NotFoundException when author is private and user does not follow', async () => {
-    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(comment))
+    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(extendedComment))
     jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(extendedUser))
     jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(null))
     jest.spyOn(commentRepositoryMock, 'getByAuthorId').mockImplementation(async () => await Promise.resolve([comment]))
@@ -170,7 +171,7 @@ describe('CommentService', () => {
   })
 
   test('getCommentsByPost() should return a ExtendedPostDTO[] object', async () => {
-    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(comment))
+    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(extendedComment))
     jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(extendedUser))
     jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(follower))
     jest
@@ -197,7 +198,7 @@ describe('CommentService', () => {
   })
 
   test('getCommentsByPost() should throw a NotFoundException when author is private and user does not follow', async () => {
-    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(comment))
+    jest.spyOn(postRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(extendedComment))
     jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(extendedUser))
     jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(null))
     jest

@@ -16,7 +16,7 @@ describe('AuthService', () => {
   const userRepositoryMock: UserRepository = new UserRepositoryImpl(db)
   const authService: AuthService = new AuthServiceImpl(userRepositoryMock)
 
-  const signupInput: SignupInputDTO = { email: 'email', username: 'username', password: 'password' }
+  const signupInput: SignupInputDTO = { email: 'email', username: 'username', password: 'password', name: '' }
   const loginInput: LoginInputDTO = { email: 'email', password: 'password' }
   const extendedUser: ExtendedUserDTO = {
     id: '1',
@@ -53,7 +53,7 @@ describe('AuthService', () => {
     jest.spyOn(userRepositoryMock, 'getByEmailOrUsername').mockImplementation(async () => await Promise.resolve(null))
 
     try {
-      await authService.signup({ email: '', username: '', password: '' })
+      await authService.signup({ email: '', username: '', password: '', name: '' })
     } catch (error: any) {
       expect(error).toBeInstanceOf(ValidationException)
     }

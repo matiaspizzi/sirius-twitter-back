@@ -254,17 +254,17 @@ router.use('/message', withAuth, messageRouter)
  *     Message:
  *       type: object
  *       required:
- *         - senderId
- *         - receiverId
+ *         - from
+ *         - to
  *         - content
  *       properties:
  *         content:
  *           type: string
  *           description: Message content
- *         senderId:
+ *         from:
  *           type: string
  *           description: Sender id
- *         receiverId:
+ *         to:
  *           type: string
  *           description: Receiver id
  *         createdAt:
@@ -273,7 +273,7 @@ router.use('/message', withAuth, messageRouter)
  *           description: The date the message was created
  *       example:
  *         content: 'Hello world!'
- *         senderId: '123'
- *         receiverId: '321'
+ *         from: '123'
+ *         to: '321'
  *         createdAt: '2021-01-01T00:00:00.000Z'
  */

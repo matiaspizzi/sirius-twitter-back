@@ -21,6 +21,10 @@ export class PostRepositoryImpl implements PostRepository {
       cursor: options.after ? { id: options.after } : options.before ? { id: options.before } : undefined,
       skip: options.after ?? options.before ? 1 : undefined,
       take: options.limit ? (options.before ? -options.limit : options.limit) : undefined,
+      where: {
+        parentId: null,
+        isComment: false
+      },
       orderBy: [
         {
           createdAt: 'desc'
@@ -45,13 +49,16 @@ export class PostRepositoryImpl implements PostRepository {
     })
   }
 
-  async getById (postId: string): Promise<PostDTO | null> {
+  async getById (postId: string): Promise<ExtendedPostDTO | null> {
     const post = await this.db.post.findUnique({
       where: {
         id: postId
+      },
+      include: {
+        author: true
       }
     })
-    return post != null ? new PostDTO(post) : null
+    return post != null ? new ExtendedPostDTO(post) : null
   }
 
   async getByAuthorId (authorId: string): Promise<ExtendedPostDTO[]> {

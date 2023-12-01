@@ -4,9 +4,11 @@ import { UserRepository, UserRepositoryImpl } from '../../../domains/user/reposi
 import { db } from '../../../utils'
 import { UserService, UserServiceImpl } from '../../../domains/user/service'
 import { NotFoundException } from '../../../utils/errors'
+import { FollowerRepositoryImpl, FollowerRepository } from '@domains/follower/repository'
 
 describe('UserService', () => {
   const userRepositoryMock: UserRepository = new UserRepositoryImpl(db)
+  const followerRepositoryMock: FollowerRepository = new FollowerRepositoryImpl(db)
 
   const user: ExtendedUserDTO = {
     id: '1',
@@ -14,6 +16,16 @@ describe('UserService', () => {
     email: 'email',
     password: 'password',
     name: 'name',
+    isPrivate: false,
+    createdAt: new Date(),
+    profilePicture: null
+  }
+  const userLogged: ExtendedUserDTO = {
+    id: '2',
+    username: 'username2',
+    email: 'email2',
+    password: 'password2',
+    name: 'name2',
     isPrivate: false,
     createdAt: new Date(),
     profilePicture: null
@@ -51,7 +63,7 @@ describe('UserService', () => {
     }
   ]
 
-  const userService: UserService = new UserServiceImpl(userRepositoryMock)
+  const userService: UserService = new UserServiceImpl(userRepositoryMock, followerRepositoryMock)
 
   test('getUser() should return a ExtendedUserDTO object', async () => {
     jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(user))
@@ -96,20 +108,34 @@ describe('UserService', () => {
     expect(usersFound).toHaveLength(0)
   })
 
-  test('getUserView() should return a UserViewDTO object', async () => {
+  test('getUserView() should return a { user: UserViewDTO, followsYou: boolean } object', async () => {
     jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(user))
-    const userFound: UserViewDTO = await userService.getUserView(user.id)
+    jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(null))
+    const userFound: { user: UserViewDTO, followsYou: boolean } = await userService.getUserView(user.id, userLogged.id)
+
+    expect(userFound.user.id).toEqual(user.id)
+    expect(userFound.user.username).toEqual(user.username)
+    expect(userFound.user.name).toEqual(user.name)
+    expect(userFound.user.profilePicture).toEqual(user.profilePicture)
+    expect(userFound.user.isPrivate).toEqual(user.isPrivate)
+    expect(userFound.followsYou).toEqual(false)
+  })
+
+  test('getSelfUserView() should return a UserViewDTO object', async () => {
+    jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(user))
+    const userFound: UserViewDTO = await userService.getSelfUserView(user.id)
 
     expect(userFound.id).toEqual(user.id)
     expect(userFound.username).toEqual(user.username)
     expect(userFound.name).toEqual(user.name)
     expect(userFound.profilePicture).toEqual(user.profilePicture)
+    expect(userFound.isPrivate).toEqual(user.isPrivate)
   })
 
   test('getUserView() should return a NotFoundException when user does not exist', async () => {
     jest.spyOn(userRepositoryMock, 'getById').mockImplementation(async () => await Promise.resolve(null))
     try {
-      await userService.getUserView(user.id)
+      await userService.getUserView(user.id, userLogged.id)
     } catch (error: any) {
       expect(error).toBeInstanceOf(NotFoundException)
     }
@@ -117,8 +143,8 @@ describe('UserService', () => {
 
   test('getUserRecommendations() should return a UserViewDTO[] object', async () => {
     const recommended: UserViewDTO[] = [
-      { id: '2', username: 'username2', name: 'name2', profilePicture: null },
-      { id: '3', username: 'username3', name: 'name3', profilePicture: null }
+      { id: '2', username: 'username2', name: 'name2', profilePicture: null, isPrivate: false },
+      { id: '3', username: 'username3', name: 'name3', profilePicture: null, isPrivate: false }
     ]
     jest
       .spyOn(userRepositoryMock, 'getRecommendedUsersPaginated')

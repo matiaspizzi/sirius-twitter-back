@@ -2,26 +2,26 @@ export class MessageDTO {
   constructor (message: MessageDTO) {
     this.id = message.id
     this.content = message.content
-    this.senderId = message.senderId
-    this.receiverId = message.receiverId
+    this.from = message.from
+    this.to = message.to
     this.createdAt = message.createdAt
   }
 
   id: string
   content: string
-  senderId: string
-  receiverId: string
+  from: string
+  to: string
   createdAt: Date
 }
 
 export class MessageInputDTO {
   constructor (message: MessageInputDTO) {
     this.content = message.content
-    this.senderId = message.senderId
-    this.receiverId = message.receiverId
+    this.from = message.from
+    this.to = message.to
   }
 
   content: string
-  senderId: string
-  receiverId: string
+  from: string
+  to: string
 }

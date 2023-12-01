@@ -1,17 +1,23 @@
-import { Socket as IOSocket } from 'socket.io'
+import { Socket as IOSocket, Server } from 'socket.io'
 import { db, Constants, Logger } from '@utils'
 import { MessageRepositoryImpl } from '@domains/message/repository'
 import { MessageServiceImpl } from '@domains/message/service'
 import jwt from 'jsonwebtoken'
-import { io } from './server'
 import { FollowerRepositoryImpl } from '@domains/follower/repository'
 import { UserRepositoryImpl } from '@domains/user/repository'
+import { server } from './server'
 
 interface Socket extends IOSocket {
   userId?: string
 }
 
 const messageService = new MessageServiceImpl(new MessageRepositoryImpl(db), new FollowerRepositoryImpl(db), new UserRepositoryImpl(db))
+export const io = new Server(server, {
+  cors: {
+    origin: Constants.CORS_WHITELIST,
+    methods: ['GET', 'POST']
+  }
+})
 
 io.use((socket: Socket, next) => {
   const token = socket.handshake.query.token
@@ -23,8 +29,7 @@ io.use((socket: Socket, next) => {
   }
 
   jwt.verify(token, Constants.TOKEN_SECRET, (err, context) => {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    if (err || context === undefined || typeof context === 'string') {
+    if (err != null || context === undefined || typeof context === 'string') {
       next(new Error('INVALID_TOKEN'))
       socket.disconnect()
     } else {
@@ -34,23 +39,19 @@ io.use((socket: Socket, next) => {
   })
 })
 
-io.on('connection', (socket: Socket) => {
+io.on('connection', async (socket: Socket) => {
   if (!socket.userId) return socket.disconnect()
   Logger.info(`user connected ${socket.userId}`)
 
-  socket.on('getMessages', async (receiverId) => {
-    if (!socket.userId) return
-    const messages = await messageService.getMessages(socket.userId, receiverId)
-    socket.emit('messages', messages)
-  })
-
-  socket.on('sendMessage', async (data) => {
+  socket.on('message', async (data) => {
     if (!socket.userId) return
     console.log(data)
-    const parsedData = JSON.parse(data)
-    console.log(parsedData.receiverId)
-    const message = await messageService.sendMessage(socket.userId, parsedData.receiverId, parsedData.content)
-    io.emit('newMessage', message)
+    try {
+      const message = await messageService.newMessage(socket.userId, data.to, data.content)
+      io.emit('message', message)
+    } catch (err) {
+      Logger.error(err)
+    }
   })
 })
 

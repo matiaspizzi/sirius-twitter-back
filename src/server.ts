@@ -8,11 +8,9 @@ import { router } from './router'
 import { ErrorHandling } from '@utils/errors'
 import { createServer } from 'node:http'
 import { specs } from '@utils/swagger'
-import { Server } from 'socket.io'
 
 export const app = express()
 export const server = createServer(app)
-export const io = new Server(server)
 
 // eslint-disable-next-line import/first
 import './socket'

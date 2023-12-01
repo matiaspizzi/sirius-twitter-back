@@ -4,7 +4,7 @@ import { PostService } from '.'
 import { FollowerRepository } from '@domains/follower/repository'
 import { UserRepository } from '@domains/user/repository'
 import { validate } from 'class-validator'
-import { ForbiddenException, NotFoundException } from '@utils'
+import { ForbiddenException, NotFoundException, Constants } from '@utils'
 import { CursorPagination } from '@types'
 import { generateS3UploadUrl } from '@utils/s3'
 
@@ -27,17 +27,12 @@ export class PostServiceImpl implements PostService {
     await this.repository.delete(postId)
   }
 
-  async getPost (userId: string, postId: string): Promise<PostDTO> {
+  async getPost (userId: string, postId: string): Promise<ExtendedPostDTO> {
     const post = await this.repository.getById(postId)
     if (!post) throw new NotFoundException('post')
-    const author = await this.userRepository.getById(post.authorId)
-    if (author) {
-      if (author.isPrivate) {
-        const doesFollow = await this.followerRepository.getByIds(userId, author.id)
-        if (!doesFollow) throw new NotFoundException('post')
-      }
-    } else {
-      throw new NotFoundException('user')
+    if (post.author.isPrivate) {
+      const doesFollow = await this.followerRepository.getByIds(userId, post.author.id)
+      if (!doesFollow) throw new NotFoundException('post')
     }
     return post
   }
@@ -48,7 +43,11 @@ export class PostServiceImpl implements PostService {
     const filteredPosts = []
     for (const post of posts) {
       const doesFollow = await this.followerRepository.getByIds(userId, post.author.id)
+<<<<<<< HEAD
       if (doesFollow || post.authorId == userId) filteredPosts.push(post)
+=======
+      if (doesFollow != null || !post.author.isPrivate) filteredPosts.push(post)
+>>>>>>> fb0bf0a9aba1e24e13077fd1d1a139d12d61648c
     }
     return filteredPosts
   }
@@ -81,6 +80,7 @@ export class PostServiceImpl implements PostService {
   }
 
   async setPostImage (): Promise<{ presignedUrl: string, fileUrl: string }> {
+<<<<<<< HEAD
     const presignedData = await generateS3UploadUrl()
     const fileUrl = `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${presignedData.filename}.jpeg`
     const data = {
@@ -88,6 +88,11 @@ export class PostServiceImpl implements PostService {
       fileUrl
     }
     return data
+=======
+    const data = await generateS3UploadUrl()
+    const url = `https://${Constants.BUCKET_NAME}.s3.amazonaws.com/${data.filename}.jpeg`
+    return { presignedUrl: data.presignedUrl, fileUrl: url }
+>>>>>>> fb0bf0a9aba1e24e13077fd1d1a139d12d61648c
   }
 
   async addQtyLikes (postId: string): Promise<void> {

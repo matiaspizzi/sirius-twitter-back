@@ -22,15 +22,15 @@ export class MessageRepositoryImpl implements MessageRepository {
     return message ? new MessageDTO(message) : null
   }
 
-  async getByUserIds (userId: string, receiverId: string): Promise<MessageDTO[]> {
+  async getByUserIds (userId: string, to: string): Promise<MessageDTO[]> {
     const messages = await this.db.message.findMany({
       where: {
         AND: [
           {
-            senderId: userId
+            from: userId
           },
           {
-            receiverId
+            to
           }
         ]
       }

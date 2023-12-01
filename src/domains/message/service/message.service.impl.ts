@@ -12,17 +12,17 @@ export class MessageServiceImpl implements MessageService {
     private readonly userRepository: UserRepository
   ) {}
 
-  async sendMessage (userId: string, receiverId: string, content: string): Promise<MessageDTO> {
-    const doesFollow = await this.followerRepository.getByIds(userId, receiverId)
-    const doesFollowBack = await this.followerRepository.getByIds(receiverId, userId)
-    if (!doesFollow || !doesFollowBack) throw new NotFoundException('user')
-    return await this.repository.create({ content, senderId: userId, receiverId })
+  async newMessage (userId: string, to: string, content: string): Promise<MessageDTO> {
+    const doesFollow = await this.followerRepository.getByIds(userId, to)
+    const doesFollowBack = await this.followerRepository.getByIds(to, userId)
+    if (!doesFollow || !doesFollowBack) throw new NotFoundException('Follow')
+    return await this.repository.create({ content, from: userId, to })
   }
 
-  async getMessages (userId: string, receiverId: string): Promise<MessageDTO[]> {
-    const receiver = await this.userRepository.getById(receiverId)
+  async getMessages (userId: string, to: string): Promise<MessageDTO[]> {
+    const receiver = await this.userRepository.getById(to)
     if (!receiver) throw new NotFoundException('user')
-    const messages = await this.repository.getByUserIds(userId, receiverId)
+    const messages = await this.repository.getByUserIds(userId, to)
     if (!messages.length) throw new NotFoundException('messages')
     return messages
   }

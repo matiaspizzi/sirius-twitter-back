@@ -6,6 +6,7 @@ import { ClassType } from '@types'
 
 export function BodyValidation<T> (target: ClassType<T>) {
   return async (req: Request, res: Response, next: NextFunction) => {
+    console.log('req.body', req.body)
     req.body = plainToInstance(target, req.body)
     const errors = await validate(req.body, {
       whitelist: true,

@@ -5,7 +5,7 @@ export interface PostRepository {
   create: (userId: string, data: CreatePostInputDTO) => Promise<PostDTO>
   getAllByDatePaginated: (options: CursorPagination) => Promise<ExtendedPostDTO[]>
   delete: (postId: string) => Promise<void>
-  getById: (postId: string) => Promise<PostDTO | null>
+  getById: (postId: string) => Promise<ExtendedPostDTO | null>
   getByAuthorId: (authorId: string) => Promise<ExtendedPostDTO[]>
   addQtyLikes: (postId: string) => Promise<void>
   subtractQtyLikes: (postId: string) => Promise<void>

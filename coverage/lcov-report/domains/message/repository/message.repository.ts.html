@@ -82,7 +82,7 @@
 export interface MessageRepository {
   create: (data: MessageInputDTO) =&gt; Promise&lt;MessageDTO&gt;
   getById: (messageId: string) =&gt; Promise&lt;MessageDTO | null&gt;
-  getByUserIds: (userId: string, receiverId: string) =&gt; Promise&lt;MessageDTO[]&gt;
+  getByUserIds: (userId: string, to: string) =&gt; Promise&lt;MessageDTO[]&gt;
 }
 &nbsp;</pre></td></tr></table></pre>
 

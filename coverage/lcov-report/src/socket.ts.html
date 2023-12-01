@@ -219,9 +219,9 @@ io.on('connection', (socket: Socket) =&gt; {
 <span class="cstat-no" title="statement not covered" >  if (!socket.userId) return socket.disconnect()</span>
 <span class="cstat-no" title="statement not covered" >  Logger.info(`user connected ${socket.userId}`)</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  socket.on('getMessages', async (receiverId) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  socket.on('getMessages', async (to) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!socket.userId) return</span>
-<span class="cstat-no" title="statement not covered" >    const messages = await messageService.getMessages(socket.userId, receiverId)</span>
+<span class="cstat-no" title="statement not covered" >    const messages = await messageService.getMessages(socket.userId, to)</span>
 <span class="cstat-no" title="statement not covered" >    socket.emit('messages', messages)</span>
 <span class="cstat-no" title="statement not covered" >  })</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -229,8 +229,8 @@ io.on('connection', (socket: Socket) =&gt; {
 <span class="cstat-no" title="statement not covered" >    if (!socket.userId) return</span>
 <span class="cstat-no" title="statement not covered" >    console.log(data)</span>
 <span class="cstat-no" title="statement not covered" >    const parsedData = JSON.parse(data)</span>
-<span class="cstat-no" title="statement not covered" >    console.log(parsedData.receiverId)</span>
-<span class="cstat-no" title="statement not covered" >    const message = await messageService.sendMessage(socket.userId, parsedData.receiverId, parsedData.content)</span>
+<span class="cstat-no" title="statement not covered" >    console.log(parsedData.to)</span>
+<span class="cstat-no" title="statement not covered" >    const message = await messageService.sendMessage(socket.userId, parsedData.to, parsedData.content)</span>
 <span class="cstat-no" title="statement not covered" >    io.emit('newMessage', message)</span>
 <span class="cstat-no" title="statement not covered" >  })</span>
 <span class="cstat-no" title="statement not covered" >})</span>
