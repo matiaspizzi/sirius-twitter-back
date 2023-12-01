@@ -25,7 +25,8 @@ export class CommentRepositoryImpl implements CommentRepository {
         parentId: postId
       },
       include: {
-        author: true
+        author: true,
+        reactions: true
       },
       cursor: options.after ? { id: options.after } : options.before ? { id: options.before } : undefined,
       skip: options.after ?? options.before ? 1 : undefined,

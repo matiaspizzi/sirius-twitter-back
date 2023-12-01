@@ -15,8 +15,9 @@ export class AuthServiceImpl implements AuthService {
   constructor (private readonly repository: UserRepository) {}
 
   async signup (data: SignupInputDTO): Promise<{ userId: string, token: string }> {
+    console.log('data', data)
     const existingUser = await this.repository.getByEmailOrUsername(data.email, data.username)
-    if (existingUser) throw new ConflictException('USER_ALREADY_EXISTS')
+    if (existingUser) throw new ValidationException([{ message: 'username or email already in use' }])
 
     const encryptedPassword = await encryptPassword(data.password)
 

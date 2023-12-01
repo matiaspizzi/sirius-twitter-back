@@ -42,15 +42,28 @@ export class PostServiceImpl implements PostService {
     return post
   }
 
-  async getLatestPosts (userId: string, options: CursorPagination): Promise<ExtendedPostDTO[]> {
+  async getLatestPostsFollowing (userId: string, options: CursorPagination): Promise<ExtendedPostDTO[]> {
     // DID: filter post search to return posts from authors that the user follows
     const posts = await this.repository.getAllByDatePaginated(options)
     const filteredPosts = []
     for (const post of posts) {
       const doesFollow = await this.followerRepository.getByIds(userId, post.author.id)
-      if (doesFollow) filteredPosts.push(post)
+      if (doesFollow || post.authorId == userId) filteredPosts.push(post)
     }
     return filteredPosts
+  }
+
+  async getLatestPosts (userId: string, options: CursorPagination): Promise<ExtendedPostDTO[]> {
+    const posts = await this.repository.getAllByDatePaginated(options)
+    const filtered: ExtendedPostDTO[] = []
+    posts.forEach(async (post) => {
+      if(post.author.isPrivate) {
+        const doesFollow = await this.followerRepository.getByIds(userId, post.author.id)
+        if (doesFollow) filtered.push(post)
+      }
+      else filtered.push(post)
+    })
+    return filtered
   }
 
   async getPostsByAuthor (userId: any, authorId: string): Promise<ExtendedPostDTO[]> {
@@ -67,9 +80,14 @@ export class PostServiceImpl implements PostService {
     return await this.repository.getByAuthorId(authorId)
   }
 
-  async setPostImage (): Promise<{ presignedUrl: string, filename: string }> {
+  async setPostImage (): Promise<{ presignedUrl: string, fileUrl: string }> {
     const presignedData = await generateS3UploadUrl()
-    return presignedData
+    const fileUrl = `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${presignedData.filename}.jpeg`
+    const data = {
+      presignedUrl: presignedData.presignedUrl,
+      fileUrl
+    }
+    return data
   }
 
   async addQtyLikes (postId: string): Promise<void> {

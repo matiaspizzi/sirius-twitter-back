@@ -17,8 +17,8 @@ const generateS3UploadUrl = async (): Promise<{ presignedUrl: string, filename: 
   const filename = crypto.randomBytes(16).toString('hex')
   const command = new PutObjectCommand({
     Bucket: process.env.BUCKET_NAME,
-    Key: `${filename}.jpeg`,
-    ContentType: 'image/jpeg'
+    Key: `${filename}.png`,
+    ContentType: 'image/png'
   })
 
   const presignedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 })

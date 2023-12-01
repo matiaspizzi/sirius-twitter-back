@@ -44,7 +44,7 @@ followerRouter.post('/follow/:user_id', async (req: Request, res: Response) => {
 
   const followed = await service.createFollow(userId, user_id)
 
-  return res.status(HttpStatus.OK).json(followed)
+  return res.status(HttpStatus.CREATED).json(followed)
 })
 
 /**

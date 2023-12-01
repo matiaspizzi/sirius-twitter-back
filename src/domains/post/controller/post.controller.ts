@@ -62,6 +62,16 @@ postRouter.get('/', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).json(posts)
 })
 
+
+postRouter.get('/following', async (req: Request, res: Response) => {
+  const { userId } = res.locals.context
+  const { limit, before, after } = req.query as Record<string, string>
+
+  const posts = await service.getLatestPostsFollowing(userId, { limit: Number(limit), before, after })
+
+  return res.status(HttpStatus.OK).json(posts)
+})
+
 /**
  * @swagger
  * /api/post/:post_id:
@@ -151,7 +161,6 @@ postRouter.get('/by_user/:userId', async (req: Request, res: Response) => {
 postRouter.post('/', BodyValidation(CreatePostInputDTO), async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const data = req.body
-
   const post = await service.createPost(userId, data)
 
   return res.status(HttpStatus.CREATED).json(post)

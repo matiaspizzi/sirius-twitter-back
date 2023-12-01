@@ -61,7 +61,6 @@ model Post {
   authorId    String     @db.Uuid // Foreign Key
   content     String     @db.VarChar(240) // Limit the content to 240 characters
   images      String[]
-  reactions   Reaction[]
   isComment   Boolean    @default(false)
   parentId    String?    @db.Uuid
   qtyLikes    Int        @default(0)
@@ -77,6 +76,8 @@ model Post {
   parent    Post?    @relation("ChildToParent", fields: [parentId], references: [id])
   
   comments  Post[]   @relation("ChildToParent")
+
+  reactions Reaction[]
 }
 
 model Reaction {

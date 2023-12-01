@@ -30,7 +30,8 @@ export class PostRepositoryImpl implements PostRepository {
         }
       ],
       include: {
-        author: true
+        author: true,
+        reactions: true
       }
     })
     return posts.map((post) => new ExtendedPostDTO(post))
@@ -59,7 +60,8 @@ export class PostRepositoryImpl implements PostRepository {
         authorId
       },
       include: {
-        author: true
+        author: true,
+        reactions: true
       }
     })
     return posts.map((post) => new ExtendedPostDTO(post))

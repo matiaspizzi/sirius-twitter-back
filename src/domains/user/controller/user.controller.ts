@@ -74,6 +74,14 @@ userRouter.get('/me', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).json(user)
 })
 
+userRouter.delete('/me', async (req: Request, res: Response) => {
+  const { userId } = res.locals.context
+  
+  await service.deleteUser(userId)
+  
+  return res.status(HttpStatus.OK).json({ message: 'User deleted' })
+})
+
 userRouter.get('/by_username/:username', async (req: Request, res: Response) => {
   const { username } = req.params
   const { limit, skip } = req.query as Record<string, string>
