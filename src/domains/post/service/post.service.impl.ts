@@ -43,11 +43,7 @@ export class PostServiceImpl implements PostService {
     const filteredPosts = []
     for (const post of posts) {
       const doesFollow = await this.followerRepository.getByIds(userId, post.author.id)
-<<<<<<< HEAD
-      if (doesFollow || post.authorId == userId) filteredPosts.push(post)
-=======
-      if (doesFollow != null || !post.author.isPrivate) filteredPosts.push(post)
->>>>>>> fb0bf0a9aba1e24e13077fd1d1a139d12d61648c
+      if (doesFollow || post.authorId === userId) filteredPosts.push(post)
     }
     return filteredPosts
   }
@@ -56,11 +52,10 @@ export class PostServiceImpl implements PostService {
     const posts = await this.repository.getAllByDatePaginated(options)
     const filtered: ExtendedPostDTO[] = []
     posts.forEach(async (post) => {
-      if(post.author.isPrivate) {
+      if (post.author.isPrivate) {
         const doesFollow = await this.followerRepository.getByIds(userId, post.author.id)
         if (doesFollow) filtered.push(post)
-      }
-      else filtered.push(post)
+      } else filtered.push(post)
     })
     return filtered
   }
@@ -80,19 +75,13 @@ export class PostServiceImpl implements PostService {
   }
 
   async setPostImage (): Promise<{ presignedUrl: string, fileUrl: string }> {
-<<<<<<< HEAD
     const presignedData = await generateS3UploadUrl()
-    const fileUrl = `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${presignedData.filename}.jpeg`
+    const fileUrl = `https://${Constants.BUCKET_NAME}.s3.amazonaws.com/${presignedData.filename}.jpeg`
     const data = {
       presignedUrl: presignedData.presignedUrl,
       fileUrl
     }
     return data
-=======
-    const data = await generateS3UploadUrl()
-    const url = `https://${Constants.BUCKET_NAME}.s3.amazonaws.com/${data.filename}.jpeg`
-    return { presignedUrl: data.presignedUrl, fileUrl: url }
->>>>>>> fb0bf0a9aba1e24e13077fd1d1a139d12d61648c
   }
 
   async addQtyLikes (postId: string): Promise<void> {
