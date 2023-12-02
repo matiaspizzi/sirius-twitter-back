@@ -21,12 +21,13 @@ export class UserServiceImpl implements UserService {
     return users.map((user) => new UserViewDTO(user))
   }
 
-  async getUserView (userId: string, loggedUser: string): Promise<{ user: UserViewDTO, followsYou: boolean }> {
+  async getUserView (userId: string, loggedUser: string): Promise<{ user: UserViewDTO, followsYou: boolean, following: boolean }> {
     const user = await this.repository.getById(userId)
     if (!user) throw new NotFoundException('user')
-    const doesFollow = await this.followerRepository.getByIds(userId, loggedUser)
+    const followsYou = await this.followerRepository.getByIds(userId, loggedUser)
+    const following = await this.followerRepository.getByIds(loggedUser, userId)
     const userView = new UserViewDTO(user)
-    return { user: userView, followsYou: doesFollow != null }
+    return { user: userView, followsYou: followsYou != null, following: following != null }
   }
 
   async getSelfUserView (userId: string): Promise<UserViewDTO> {
@@ -53,10 +54,10 @@ export class UserServiceImpl implements UserService {
     return await this.repository.setPrivate(userId, set)
   }
 
-  async setProfilePicture (userId: string): Promise<{ presignedUrl: string, profilePictureUrl: string }> {
+  async setProfilePicture (userId: string, filetype: string): Promise<{ presignedUrl: string, profilePictureUrl: string }> {
     const user = await this.repository.getById(userId)
     if (!user) throw new NotFoundException('user')
-    const data = await generateS3UploadUrl()
+    const data = await generateS3UploadUrl(filetype)
     const url = `https://${Constants.BUCKET_NAME}.s3.amazonaws.com/${data.filename}.jpeg`
     await this.repository.setProfilePicture(userId, url)
     return { presignedUrl: data.presignedUrl, profilePictureUrl: url }

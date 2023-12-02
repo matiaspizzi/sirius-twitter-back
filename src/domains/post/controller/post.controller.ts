@@ -62,7 +62,6 @@ postRouter.get('/', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).json(posts)
 })
 
-
 postRouter.get('/following', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { limit, before, after } = req.query as Record<string, string>
@@ -199,6 +198,8 @@ postRouter.delete('/:postId', async (req: Request, res: Response) => {
 })
 
 postRouter.get('/image/presignedUrl', async (req: Request, res: Response) => {
-  const data = await service.setPostImage()
-  if (data !== null) return res.status(HttpStatus.OK).send({ data })
+  const { filetype } = req.query as Record<string, string>
+
+  const data = await service.setPostImage(filetype)
+  if (data !== null) return res.status(HttpStatus.OK).send(data)
 })

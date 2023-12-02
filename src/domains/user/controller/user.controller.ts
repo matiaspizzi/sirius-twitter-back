@@ -77,9 +77,9 @@ userRouter.get('/me', async (req: Request, res: Response) => {
 
 userRouter.delete('/me', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
-  
+
   await service.deleteUser(userId)
-  
+
   return res.status(HttpStatus.OK).json({ message: 'User deleted' })
 })
 
@@ -172,7 +172,8 @@ userRouter.post('/private/:isPrivate', async (req: Request, res: Response) => {
  */
 userRouter.get('/profilePicture/presignedUrl', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
-  const data = await service.setProfilePicture(userId)
+  const { filetype } = req.query as Record<string, string>
+  const data = await service.setProfilePicture(userId, filetype)
   if (data !== null) return res.status(HttpStatus.OK).send(data)
 })
 
