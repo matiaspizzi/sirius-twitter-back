@@ -17,7 +17,7 @@ const generateS3UploadUrl = async (filetype: string): Promise<{ presignedUrl: st
   const filename = crypto.randomBytes(16).toString('hex')
   const command = new PutObjectCommand({
     Bucket: process.env.BUCKET_NAME,
-    Key: `${filename}.png`,
+    Key: `${filename}.${filetype.split('/')[1]}`,
     ContentType: filetype
   })
 

@@ -17,7 +17,7 @@ export class AuthServiceImpl implements AuthService {
   async signup (data: SignupInputDTO): Promise<{ userId: string, token: string }> {
     console.log('data', data)
     const existingUser = await this.repository.getByEmailOrUsername(data.email, data.username)
-    if (existingUser) throw new ValidationException([{ message: 'username or email already in use' }])
+    if (existingUser) throw new ValidationException([{ message: 'username/email' }])
 
     const encryptedPassword = await encryptPassword(data.password)
 
@@ -33,7 +33,7 @@ export class AuthServiceImpl implements AuthService {
 
     const isCorrectPassword = await checkPassword(data.password, user.password)
 
-    if (!isCorrectPassword) throw new ValidationException([{ message: 'Invalid password' }])
+    if (!isCorrectPassword) throw new ValidationException([{ message: 'password' }])
 
     const token = generateAccessToken({ userId: user.id })
 
