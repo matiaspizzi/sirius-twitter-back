@@ -220,9 +220,9 @@ userRouter.get('/profilePicture', async (req: Request, res: Response) => {
  *               $ref: '#/components/schemas/User'
  */
 userRouter.get('/:userId', async (req: Request, res: Response) => {
-  const { userId: otherUserId } = req.params
-  const { loggedUser } = res.locals.context
-  const user = await service.getUserView(otherUserId, loggedUser)
+  const { userId } = req.params
+  const { userId: loggedUser } = res.locals.context
+  const user = await service.getUserView(userId, loggedUser)
 
   return res.status(HttpStatus.OK).json(user)
 })
