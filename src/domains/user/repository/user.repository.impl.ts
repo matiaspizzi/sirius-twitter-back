@@ -55,7 +55,7 @@ export class UserRepositoryImpl implements UserRepository {
       where: {
         followers: {
           some: {
-            id: userId
+            followerId: userId
           }
         }
       }
@@ -68,7 +68,7 @@ export class UserRepositoryImpl implements UserRepository {
         where: {
           followers: {
             some: {
-              id: user.id
+              followerId: user.id
             }
           }
         }
@@ -95,6 +95,8 @@ export class UserRepositoryImpl implements UserRepository {
         id: 'asc'
       }
     })
+
+    console.log(users)
 
     return users.map((user) => new UserViewDTO(user))
   }

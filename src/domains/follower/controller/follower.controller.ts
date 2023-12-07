@@ -78,3 +78,13 @@ followerRouter.post('/unfollow/:user_id', async (req: Request, res: Response) =>
 
   return res.status(HttpStatus.OK).json({ message: 'Unfollowed' })
 })
+
+followerRouter.get('/doesFollow/:user_id', async (req: Request, res: Response) => {
+  const { userId } = res.locals.context
+  const { user_id } = req.params
+
+  const doesFollow = await service.getFollowByIds(userId, user_id)
+  if( !doesFollow ) return res.status(HttpStatus.OK).json({ doesFollow: false })
+
+  return res.status(HttpStatus.OK).json({ doesFollow: true })
+})

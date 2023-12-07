@@ -38,7 +38,14 @@ export class UserServiceImpl implements UserService {
   }
 
   async getUserRecommendations (userId: string, options: OffsetPagination): Promise<UserViewDTO[]> {
-    return await this.repository.getRecommendedUsersPaginated(userId, options)
+    const recommendedUsers = await this.repository.getRecommendedUsersPaginated(userId, options)
+    const filterPromises = recommendedUsers.map(async (user) => {
+      const following = await this.followerRepository.getByIds(userId, user.id)
+      return following ? false : true
+    });
+    const filterResults = await Promise.all(filterPromises);
+    const filteredUsers = recommendedUsers.filter((_, index) => filterResults[index]);
+    return filteredUsers.map((user) => new UserViewDTO(user));
   }
 
   async deleteUser (userId: string): Promise<void> {
