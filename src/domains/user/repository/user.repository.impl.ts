@@ -117,6 +117,24 @@ export class UserRepositoryImpl implements UserRepository {
     return user ? new ExtendedUserDTO(user) : null
   }
 
+  async getByEmail (email: string): Promise<ExtendedUserDTO | null> {
+    const user = await this.db.user.findFirst({
+      where: {
+        email
+      }
+    })
+    return user ? new ExtendedUserDTO(user) : null
+  }
+
+  async getByUsername (username: string): Promise<ExtendedUserDTO | null> {
+    const user = await this.db.user.findFirst({
+      where: {
+        username
+      }
+    })
+    return user ? new ExtendedUserDTO(user) : null
+  }
+
   async setPrivate (userId: string, isPrivate: boolean): Promise<boolean> {
     const user = await this.db.user.update({
       where: {

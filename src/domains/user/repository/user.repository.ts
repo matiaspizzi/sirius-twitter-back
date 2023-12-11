@@ -8,6 +8,8 @@ export interface UserRepository {
   getRecommendedUsersPaginated: (userId: string, options: OffsetPagination) => Promise<UserViewDTO[]>
   getById: (userId: string) => Promise<ExtendedUserDTO | null>
   getByEmailOrUsername: (email?: string, username?: string) => Promise<ExtendedUserDTO | null>
+  getByUsername: (username: string) => Promise<ExtendedUserDTO | null>
+  getByEmail: (email: string) => Promise<ExtendedUserDTO | null>
   setPrivate: (userId: string, isPrivate: boolean) => Promise<boolean>
   setProfilePicture: (userId: string, pictureUrl: string) => Promise<void>
   getProfilePicture: (userId: string) => Promise<string | null>
