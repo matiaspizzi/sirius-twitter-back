@@ -13,26 +13,54 @@ export class MessageRepositoryImpl implements MessageRepository {
       .then((message) => new MessageDTO(message))
   }
 
-  async getById (messageId: string): Promise<MessageDTO | null> {
-    const message = await this.db.message.findUnique({
-      where: {
-        id: messageId
-      }
-    })
-    return message ? new MessageDTO(message) : null
-  }
-
-  async getByUserIds (userId: string, to: string): Promise<MessageDTO[]> {
+  async getChats (userId: string): Promise<MessageDTO[]> {
     const messages = await this.db.message.findMany({
       where: {
-        AND: [
+        OR: [
           {
             from: userId
           },
           {
-            to
+            to: userId
           }
         ]
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      distinct: ['from', 'to']
+    })
+    return messages.map((message) => new MessageDTO(message))
+  }
+
+  async getChat (userId: string, to: string): Promise<MessageDTO[]> {
+    const messages = await this.db.message.findMany({
+      where: {
+        OR: [
+          {
+            AND: [
+              {
+                from: userId
+              },
+              {
+                to
+              }
+            ]
+          },
+          {
+            AND: [
+              {
+                from: to
+              },
+              {
+                to: userId
+              }
+            ]
+          }
+        ]
+      },
+      orderBy: {
+        createdAt: 'asc'
       }
     })
     return messages.map((message) => new MessageDTO(message))

@@ -4,6 +4,7 @@ import { MessageRepository } from '../repository'
 import { MessageService } from './message.service'
 import { FollowerRepository } from '@domains/follower/repository'
 import { UserRepository } from '@domains/user/repository'
+import { UserViewDTO } from '@domains/user/dto'
 
 export class MessageServiceImpl implements MessageService {
   constructor (
@@ -18,12 +19,22 @@ export class MessageServiceImpl implements MessageService {
     if (!doesFollow || !doesFollowBack) throw new NotFoundException('Follow')
     return await this.repository.create({ content, from: userId, to })
   }
+  
+  async getChats (userId: string): Promise<UserViewDTO[]> {
+    const messages = await this.repository.getChats(userId)
+    const users = await Promise.all(
+      messages.map(async (message) => {
+        const user = await this.userRepository.getById(message.from === userId ? message.to : message.from)
+        if (user) return new UserViewDTO(user)
+      })
+    )
+    return users.filter((user) => user) as UserViewDTO[]
+  }
 
-  async getMessages (userId: string, to: string): Promise<MessageDTO[]> {
+  async getChat (userId: string, to: string): Promise<MessageDTO[]> {
     const receiver = await this.userRepository.getById(to)
     if (!receiver) throw new NotFoundException('user')
-    const messages = await this.repository.getByUserIds(userId, to)
-    if (!messages.length) throw new NotFoundException('messages')
+    const messages = await this.repository.getChat(userId, to)
     return messages
   }
 }

@@ -1,6 +1,8 @@
+import { UserViewDTO } from '@domains/user/dto'
 import { MessageDTO } from '../dto'
 
 export interface MessageService {
-  getMessages: (userId: string, to: string) => Promise<MessageDTO[]>
   newMessage: (userId: string, to: string, content: string) => Promise<MessageDTO>
+  getChats: (userId: string) => Promise<UserViewDTO[]>
+  getChat: (user1Id: string, user2Id: string) => Promise<MessageDTO[] | Boolean>
 }
