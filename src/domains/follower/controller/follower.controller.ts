@@ -88,3 +88,27 @@ followerRouter.get('/doesFollow/:user_id', async (req: Request, res: Response) =
 
   return res.status(HttpStatus.OK).json({ doesFollow: true })
 })
+
+followerRouter.get('/followers/:user_id', async (req: Request, res: Response) => {
+  const { user_id } = req.params
+
+  const followers = await service.getFollowers(user_id)
+
+  return res.status(HttpStatus.OK).json(followers)
+})
+
+followerRouter.get('/followings/:user_id', async (req: Request, res: Response) => {
+  const { user_id } = req.params
+
+  const followings = await service.getFollows(user_id)
+
+  return res.status(HttpStatus.OK).json(followings)
+})
+
+followerRouter.get('/mutual', async (req: Request, res: Response) => {
+  const { userId } = res.locals.context
+
+  const mutuals = await service.getMutuals(userId)
+  console.log(mutuals)  
+  return res.status(HttpStatus.OK).json(mutuals)
+})

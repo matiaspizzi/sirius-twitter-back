@@ -3,6 +3,7 @@ import { FollowerRepository } from '../repository'
 import { FollowerService } from '.'
 import { NotFoundException, ForbiddenException } from '@utils'
 import { UserRepository } from '@domains/user/repository'
+import { UserViewDTO } from '@domains/user/dto'
 
 export class FollowerServiceImpl implements FollowerService {
   constructor (private readonly repository: FollowerRepository, private readonly userRepository: UserRepository) {}
@@ -43,5 +44,18 @@ export class FollowerServiceImpl implements FollowerService {
     const user = await this.userRepository.getById(userId)
     if (!user) throw new NotFoundException('user')
     return await this.repository.getFollows(userId)
+  }
+
+  async getMutuals (userId: string): Promise<UserViewDTO[]> {
+    const followers = await this.repository.getFollowers(userId)
+    const follows = await this.repository.getFollows(userId)
+    const mutuals = followers.filter((follower) => follows.find((follow) => follow.followedId === follower.followerId))
+    const users = await Promise.all(
+      mutuals.map(async (mutual) => {
+        const user = await this.userRepository.getById(mutual.followerId)
+        if (user) return new UserViewDTO(user)
+      })
+    )
+    return users.filter((user) => user) as UserViewDTO[]
   }
 }
