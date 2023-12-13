@@ -19,26 +19,26 @@ datasource db {
 model User {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid // Primary Key
 
-  username          String  @unique // Unique constraint
-  name              String? @db.VarChar(35) // Limit display name to 35 characters
-  email             String  @unique // Unique constraint
-  password          String
-  isPrivate         Boolean @default(false)
-  profilePicture    String? @db.VarChar(255)
+  username       String  @unique // Unique constraint
+  name           String? @db.VarChar(35) // Limit display name to 35 characters
+  email          String  @unique // Unique constraint
+  password       String
+  isPrivate      Boolean @default(false)
+  profilePicture String? @db.VarChar(255)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime? // Optional value
 
-  posts     Post[]
+  posts Post[]
 
-  follows   Follow[]   @relation(name: "follows")
-  followers Follow[]   @relation(name: "followers")
+  follows   Follow[] @relation(name: "follows")
+  followers Follow[] @relation(name: "followers")
 
   reactions Reaction[]
 
-  messagesSended   Message[]  @relation(name: "messagesSended")
-  messagesReceived Message[]  @relation(name: "messagesReceived")
+  messagesSended   Message[] @relation(name: "messagesSended")
+  messagesReceived Message[] @relation(name: "messagesReceived")
 }
 
 model Follow {
@@ -58,24 +58,24 @@ model Follow {
 model Post {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid // Primary Key
 
-  authorId    String     @db.Uuid // Foreign Key
-  content     String     @db.VarChar(240) // Limit the content to 240 characters
+  authorId    String   @db.Uuid // Foreign Key
+  content     String   @db.VarChar(240) // Limit the content to 240 characters
   images      String[]
-  isComment   Boolean    @default(false)
-  parentId    String?    @db.Uuid
-  qtyLikes    Int        @default(0)
-  qtyRetweets Int        @default(0)
-  qtyComments Int        @default(0)
+  isComment   Boolean  @default(false)
+  parentId    String?  @db.Uuid
+  qtyLikes    Int      @default(0)
+  qtyRetweets Int      @default(0)
+  qtyComments Int      @default(0)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime? // Optional value
 
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade) // One to many
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade) // One to many
 
-  parent    Post?    @relation("ChildToParent", fields: [parentId], references: [id])
-  
-  comments  Post[]   @relation("ChildToParent")
+  parent Post? @relation("ChildToParent", fields: [parentId], references: [id])
+
+  comments Post[] @relation("ChildToParent")
 
   reactions Reaction[]
 }
@@ -103,9 +103,9 @@ enum ReactionType {
 model Message {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  from       String @db.Uuid
-  to         String @db.Uuid
-  content    String
+  from    String @db.Uuid
+  to      String @db.Uuid
+  content String
 
   createdAt DateTime @default(now())
 
