@@ -19,7 +19,7 @@ export class MessageServiceImpl implements MessageService {
     if (!doesFollow || !doesFollowBack) throw new NotFoundException('Follow')
     return await this.repository.create({ content, from: userId, to })
   }
-  
+
   async getChats (userId: string): Promise<UserViewDTO[]> {
     const messages = await this.repository.getChats(userId)
     const users = await Promise.all(
