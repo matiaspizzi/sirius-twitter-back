@@ -83,10 +83,9 @@ followerRouter.get('/doesFollow/:user_id', async (req: Request, res: Response) =
   const { userId } = res.locals.context
   const { user_id } = req.params
 
-  const doesFollow = await service.getFollowByIds(userId, user_id)
-  if( !doesFollow ) return res.status(HttpStatus.OK).json({ doesFollow: false })
+  const doesFollow = await service.doesFollowExist(userId, user_id)
 
-  return res.status(HttpStatus.OK).json({ doesFollow: true })
+  return res.status(HttpStatus.OK).json({ doesFollow })
 })
 
 followerRouter.get('/followers/:user_id', async (req: Request, res: Response) => {
@@ -109,6 +108,6 @@ followerRouter.get('/mutual', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
 
   const mutuals = await service.getMutuals(userId)
-  console.log(mutuals)  
+  console.log(mutuals)
   return res.status(HttpStatus.OK).json(mutuals)
 })

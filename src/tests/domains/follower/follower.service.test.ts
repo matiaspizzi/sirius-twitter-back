@@ -84,25 +84,6 @@ describe('FollowerService', () => {
     }
   })
 
-  test('getFollowByIds() should return a FollowerDTO object', async () => {
-    jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(follower))
-    const followerFound: FollowerDTO = await followerService.getFollowByIds(follower.followerId, follower.followedId)
-
-    expect(followerFound.id).toBeDefined()
-    expect(followerFound.followerId).toEqual(follower.followerId)
-    expect(followerFound.followedId).toEqual(follower.followedId)
-    expect(followerFound.createdAt).toEqual(follower.createdAt)
-  })
-
-  test('getFollowByIds() should throw a NotFoundException when follow does not exist', async () => {
-    jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(null))
-    try {
-      await followerService.getFollowByIds(follower.followerId, follower.followedId)
-    } catch (error: any) {
-      expect(error).toBeInstanceOf(NotFoundException)
-    }
-  })
-
   test('doesFollowExist() should return true', async () => {
     jest.spyOn(followerRepositoryMock, 'getByIds').mockImplementation(async () => await Promise.resolve(follower))
     const followExists: boolean = await followerService.doesFollowExist(follower.followerId, follower.followedId)

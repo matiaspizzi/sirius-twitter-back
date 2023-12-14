@@ -23,12 +23,6 @@ export class FollowerServiceImpl implements FollowerService {
     await this.repository.delete(follow.id)
   }
 
-  async getFollowByIds (followerId: string, followedId: string): Promise<FollowerDTO> {
-    const follow = await this.repository.getByIds(followerId, followedId)
-    if (!follow) throw new NotFoundException('follow')
-    return follow
-  }
-
   async doesFollowExist (followerId: string, followedId: string): Promise<boolean> {
     const follow = await this.repository.getByIds(followerId, followedId)
     return follow != null
