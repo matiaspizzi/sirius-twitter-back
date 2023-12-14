@@ -74,7 +74,6 @@ reactionRouter.delete('/:postId', ReactionTypeValidation, async (req: Request, r
   const { userId } = res.locals.context
   const { postId } = req.params
   const type: any = req.query.type
-  console.log(type, 'type', postId, 'postId', userId, 'userId')
   await service.deleteReaction(userId, postId, type)
   return res.status(HttpStatus.OK).send({ message: `Deleted reaction ${type as string} in post ${postId}` })
 })

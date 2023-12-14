@@ -96,8 +96,6 @@ export class UserRepositoryImpl implements UserRepository {
       }
     })
 
-    console.log(users)
-
     return users.map((user) => new UserViewDTO(user))
   }
 

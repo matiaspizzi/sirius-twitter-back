@@ -43,9 +43,8 @@ io.on('connection', async (socket: Socket) => {
   if (!socket.userId) return socket.disconnect()
   Logger.info(`user connected ${socket.userId}`)
 
-  socket.on('message', async (data) => {
+  socket.on('message', async (data): Promise<void> => {
     if (!socket.userId) return
-    console.log(data)
     try {
       const message = await messageService.newMessage(socket.userId, data.to, data.content)
       io.emit('message', message)
