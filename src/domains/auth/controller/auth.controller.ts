@@ -77,3 +77,11 @@ authRouter.post('/login', BodyValidation(LoginInputDTO), async (req: Request, re
 
   return res.status(HttpStatus.OK).json(token)
 })
+
+authRouter.post('/verifyToken', async (req: Request, res: Response) => {
+  const { token } = req.body;
+
+  const isValid = service.verifyToken(token)
+
+  return res.status(HttpStatus.OK).json(isValid)
+})

@@ -1,15 +1,15 @@
 import { UserRepository } from '@domains/user/repository'
 import {
   checkPassword,
-  ConflictException,
   encryptPassword,
   generateAccessToken,
   NotFoundException,
   ValidationException
 } from '@utils'
-
+import jwt from 'jsonwebtoken'
 import { LoginInputDTO, SignupInputDTO } from '../dto'
 import { AuthService } from './auth.service'
+import { Constants } from '@utils'
 
 export class AuthServiceImpl implements AuthService {
   constructor (private readonly repository: UserRepository) {}
@@ -39,5 +39,14 @@ export class AuthServiceImpl implements AuthService {
     const token = generateAccessToken({ userId: user.id })
 
     return { userId: user.id, token }
+  }
+
+  verifyToken (token: string): {isValid: boolean} {
+    try {
+      jwt.verify(token, Constants.TOKEN_SECRET)
+      return { isValid: true }
+    } catch (err) {
+      return { isValid: false }
+    }
   }
 }
